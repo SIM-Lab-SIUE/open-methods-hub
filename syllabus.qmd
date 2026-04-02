@@ -125,23 +125,23 @@ Per the SIUE Student Academic Code (3C2), plagiarism and cheating will not be to
 
 | Week | Dates | Reading | Assignment Due |
 |------|-------|---------|----------------|
-| 1 | Jan 12 | Ch 1: The Architecture of Curiosity | GitHub Profile |
-| 2 | Jan 19 | Ch 2–3: Trust & Reading Protocol | Syllabus Contract |
-| 3 | Jan 26 | Ch 4–5: The Archivist & Choosing Your Lens | Project Setup |
-| 4 | Feb 02 | Ch 6–7: The Roadmap & The Research Question | Archivist Report |
-| 5 | Feb 09 | Ch 8: The Ethics of Inquiry | Annotated Manuscript |
-| 6 | Feb 16 | Ch 9–10: Methodologist's Toolkit & Surveys | Project Prospectus |
-| 7 | Feb 23 | Ch 11–12: Experiments & Music Immersion | Topic Selection (RQs) |
-| 8 | Mar 02 | Ch 13–14: Vibes to Variables & The Rulebook | Definitions Practice |
-| 9 | Mar 09 | **SPRING BREAK** | |
-| 10 | Mar 16 | Ch 15: The Sampling Plan and Pilot Test | Codebook & Qual Memo |
-| 11 | Mar 23 | Ch 16: Qualitative Methods | Sampling Plan & Pilot |
-| 12 | Mar 30 | R Workbook (no chapter) | CITI Certification |
-| 13 | Apr 06 | Ch 17–18: Wrangling & Seeing Patterns | Data Wrangling [R] |
-| 14 | Apr 13 | Ch 19–20: Surprise Detector & Interpreting | Describing Data [R] |
-| 15 | Apr 20 | Ch 21–22: Portfolio & Going Live | Inferencing Data [R] |
-| 16 | Apr 27 | **Work Week** | |
-| 17 | May 04 | **Finals Week** | Final Web Portfolio |
+| 1 | Aug 24 | Syllabus and Introductions | GitHub Profile |
+| 2 | Aug 31 | Ch 1–2: Curiosity & Trust | Syllabus Contract |
+| 3 | Sep 07 | Ch 3–4: Reading Protocol & The Archivist | Project Setup |
+| 4 | Sep 14 | Ch 5–6: Choosing Your Lens & The Roadmap | Archivist Report |
+| 5 | Sep 21 | Ch 7–8: Research Question & Ethics | Annotated Manuscript |
+| 6 | Sep 28 | Ch 9–10: Toolkit & Qualitative Methods | Project Prospectus |
+| 7 | Oct 05 | Ch 11–12: Surveys & Experiments | Topic Selection (RQs) |
+| 8 | Oct 12 | Ch 13–14: Immersion & Vibes to Variables | Definitions Practice |
+| 9 | Oct 19 | Ch 15–16: The Rulebook & Sampling Plan | Codebook & Qual Memo |
+| 10 | Oct 26 | Ch 17: Wrangling the Chaos | Sampling Plan & Pilot |
+| 11 | Nov 02 | Ch 18: Seeing Patterns | Data Wrangling [R] |
+| 12 | Nov 09 | Ch 19: The Surprise Detector | Describing Data [R] |
+| 13 | Nov 16 | Ch 20: Interpreting the Call | Inferencing Data [R] |
+| 14 | Nov 23 | **THANKSGIVING BREAK** | |
+| 15 | Nov 30 | Ch 21–22: Portfolio & Going Live | CITI Certification |
+| 16 | Dec 07 | **Remote Work Week** | |
+| 17 | Dec 14 | **Finals Week** | Final Web Portfolio |
 
 *Schedule subject to change with notice*
 

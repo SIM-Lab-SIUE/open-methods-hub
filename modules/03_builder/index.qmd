@@ -37,14 +37,12 @@ This is the longest and most substantive phase. You move from planning to buildi
 
 | Week | Reading | Focus | Assignment Due |
 |------|---------|-------|----------------|
-| 5 | Ch 8: Ethics of Inquiry | Belmont Report; IRB; ethics in content analysis | Annotated Manuscript (25 pts) |
-| 6 | Ch 9–10: Toolkit & Surveys | Methods overview; survey design; sampling theory | Project Prospectus (25 pts) |
-| 7 | Ch 11–12: Experiments & Immersion | Experimental design (conceptual); begin data immersion | Topic Selection / RQs (25 pts) |
-| 8 | Ch 13–14: Vibes to Variables & Rulebook | Operationalization; codebook design; decision rules | Definitions Practice (25 pts) |
-| 9 | **SPRING BREAK** | | |
-| 10 | Ch 15: Sampling Plan & Pilot | Sampling strategies; pilot testing; inter-coder reliability | Codebook & Qual Memo (50 pts) |
-| 11 | Ch 16: Qualitative Methods | Interviews; focus groups; thematic analysis | Sampling Plan & Pilot (75 pts) |
-| 12 | R Workbook (no chapter) | R skills practice; remote work week | CITI Certification (50 pts) |
+| 5 | Ch 7–8: Research Question & Ethics | Writing strong RQs; Belmont Report; IRB; ethics in content analysis | Annotated Manuscript (25 pts) |
+| 6 | Ch 9–10: Toolkit & Qualitative Methods | Methods overview; interviews; focus groups; thematic analysis | Project Prospectus (25 pts) |
+| 7 | Ch 11–12: Surveys & Experiments | Survey design; sampling theory; experimental design (conceptual) | Topic Selection / RQs (25 pts) |
+| 8 | Ch 13–14: Immersion & Vibes to Variables | Data immersion; operationalization; conceptual vs. operational definitions | Definitions Practice (25 pts) |
+| 9 | Ch 15–16: Rulebook & Sampling Plan | Codebook construction; sampling strategies; pilot testing; reliability | Codebook & Qual Memo (50 pts) |
+| 10 | Ch 17: Wrangling the Chaos | R programming begins; data wrangling with tidyverse | Sampling Plan & Pilot (75 pts) |
 
 ---
 

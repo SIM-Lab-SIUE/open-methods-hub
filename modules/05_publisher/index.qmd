@@ -40,9 +40,9 @@ Your final portfolio presents a two-part content analysis:
 
 | Week | Focus | Deliverable |
 |------|-------|-------------|
-| 15 | Ch 21–22: Portfolio & Going Live | Begin assembling final project |
-| 16 | **Work Week** — no class meetings | Build, render, publish |
-| 17 | **Finals Week** | Final Web Portfolio due (May 8) |
+| 15 | Ch 21–22: Portfolio & Going Live | CITI Certification; begin assembling final project |
+| 16 | **Remote Work Week** — no class meetings | Build, render, publish |
+| 17 | **Finals Week** | Final Web Portfolio due |
 
 ---
 

@@ -5,7 +5,7 @@ title: "Phase IV: The Analyst"
 :::{.phase-header}
 # Phase IV: The Analyst
 
-**Duration:** Weeks 13–15 | **Points:** 225
+**Duration:** Weeks 11–13 | **Points:** 225
 Analyze data using R for statistical insights
 :::
 
@@ -28,7 +28,7 @@ By the end of Phase IV, you will:
 
 ## Phase IV Overview
 
-This phase is where your research becomes quantitative. Using the R skills you practiced in the Week 12 workbook, you now apply data wrangling, visualization, and statistical testing to the `unified_music` dataset from coursepackR. These three assignments build on each other sequentially — each one prepares you for the next and for the final project.
+This phase is where your research becomes quantitative. Weeks 10–13 each get two full class sessions dedicated to a single R/analysis chapter, giving you time to practice in class. You apply data wrangling, visualization, and statistical testing to the `unified_music` dataset from coursepackR. These three assignments build on each other sequentially.
 
 ---
 
@@ -36,9 +36,9 @@ This phase is where your research becomes quantitative. Using the R skills you p
 
 | Week | Reading | Focus | Assignment Due |
 |------|---------|-------|----------------|
-| 13 | Ch 17–18: Wrangling & Seeing Patterns | dplyr pipeline; ggplot2 grammar of graphics | Data Wrangling [R] (50 pts) |
-| 14 | Ch 19–20: Surprise Detector & Interpreting | Hypothesis testing; effect sizes; APA reporting | Describing Data [R] (75 pts) |
-| 15 | Ch 21–22: Portfolio & Going Live | Quarto books; GitHub Pages deployment | Inferencing Data [R] (100 pts) |
+| 11 | Ch 18: Seeing Patterns | ggplot2 grammar of graphics; publication-quality visualization | Data Wrangling [R] (50 pts) |
+| 12 | Ch 19: The Surprise Detector | Hypothesis testing; chi-square, correlation, regression; APA reporting | Describing Data [R] (75 pts) |
+| 13 | Ch 20: Interpreting the Call | Effect sizes; power; honest discussion writing | Inferencing Data [R] (100 pts) |
 
 ---
 
@@ -98,6 +98,6 @@ data(unified_music)
 
 ## Related Resources
 
-- [From Vibes to Variables — Chapters 17–22](https://sim-lab-siue.github.io/vibes-to-variables/)
+- [From Vibes to Variables — Chapters 17–20](https://sim-lab-siue.github.io/vibes-to-variables/)
 - [coursepackR Documentation](https://sim-lab-siue.github.io/coursepackR/)
 - [Install R & RStudio](../../resources/install-r-rstudio.qmd)

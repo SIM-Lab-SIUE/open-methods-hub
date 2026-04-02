@@ -42,10 +42,10 @@ In this phase, you develop the habits of a research journalist: reading critical
 
 | Week | Reading | Key Topics |
 |------|---------|------------|
-| 1 | Ch 1: The Architecture of Curiosity | Research as storytelling; observation vs. evidence; the research cycle |
-| 2 | Ch 2–3: Trust & Reading Protocol | Reproducibility; tools (R, Obsidian, Quarto, Git); active reading; IMRAD structure |
-| 3 | Ch 4–5: Archivist & Choosing Your Lens | Literature review; search strategies; theory as a focusing tool; three paradigms |
-| 4 | Ch 6–7: Roadmap & Research Question | Narrowing a topic; Holy Trinity (Topic, Theory, Data); writing strong RQs |
+| 1 | Syllabus and Introductions | Course overview; tools; GitHub setup |
+| 2 | Ch 1–2: Curiosity & Trust | Research as storytelling; reproducibility; tools (R, Obsidian, Quarto, Git) |
+| 3 | Ch 3–4: Reading Protocol & Archivist | Active reading; IMRAD; Zotero; literature searching; citation chaining |
+| 4 | Ch 5–6: Lens & Roadmap | Theory as a focusing tool; three paradigms; narrowing a topic; Holy Trinity |
 
 ---
 
