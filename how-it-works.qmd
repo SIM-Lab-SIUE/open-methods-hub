@@ -1,0 +1,94 @@
+---
+title: "How This Ecosystem Works"
+---
+
+## Four Tools, One Workflow
+
+This course uses four interconnected tools. Each one has a specific job. Here is where to go for what.
+
+---
+
+### Where to Find Things
+
+| I need to... | Go here |
+|---|---|
+| Check the schedule or find an assignment description | **This website** (Open Methods Hub) |
+| Download this week's template | **RStudio:** `coursepackR::download_week(N)` |
+| Write a journal entry or organize notes | **Obsidian** (Methods Vault) |
+| Read the textbook | **[From Vibes to Variables](https://sim-lab-siue.github.io/vibes-to-variables/)** (online) or Obsidian (`05_Textbook/`) |
+| Run R code or render a document | **RStudio** |
+| Submit an assignment | **Blackboard** |
+| Push my work to my portfolio | **GitHub Desktop** |
+
+---
+
+### The Four Tools
+
+**Obsidian (Methods Vault)** is your personal workspace. You write journals, take literature notes, and organize your project here. Everything is Markdown — the same syntax you will use in R and Quarto later. You start using Obsidian in Week 1.
+
+**coursepackR** is an R package you install once. It sets up your environment, checks that everything works, and delivers weekly assignment templates and the practice dataset. You install it in Week 2 and use it throughout the semester.
+
+**From Vibes to Variables** is the textbook. You can read it online or in your Obsidian vault. It has 22 chapters covering the full research arc from curiosity to publication.
+
+**This website (Open Methods Hub)** is your reference guide. It has the syllabus, the weekly schedule, setup instructions, and assignment descriptions. When you are not sure what is due or how to do something, check here first.
+
+---
+
+### The Weekly Rhythm
+
+Each teaching week follows the same pattern:
+
+1. **Read** the assigned chapter(s) in the textbook
+2. **Download** the week's template: `coursepackR::download_week(N)`
+3. **Work** through the template in RStudio or Obsidian (depending on the week)
+4. **Write** your journal entry in Obsidian
+5. **Push** your journal to GitHub using GitHub Desktop
+6. **Submit** any assignments to Blackboard by the deadline
+
+---
+
+### How the Tools Connect
+
+```
+  You read the textbook
+         |
+         v
+  You work in Obsidian (journals, notes, qualitative work)
+         |
+         v
+  You push to GitHub (builds your commit history)
+         |
+         v
+  You work in RStudio (R assignments, data analysis)
+         |
+         v
+  You render with Quarto (final portfolio: PDF + website)
+         |
+         v
+  You publish to GitHub Pages (live portfolio URL)
+         |
+         v
+  You submit to Blackboard (PDF + URL)
+```
+
+---
+
+### When Each Tool Appears
+
+| Weeks | Primary Tools |
+|-------|--------------|
+| 1-9 | Obsidian, GitHub Desktop, Zotero, this website |
+| 10-13 | RStudio, R, coursepackR (plus Obsidian for journals) |
+| 15-17 | Quarto, GitHub Pages (assembling the final portfolio) |
+
+You do not need to learn everything at once. Each tool is introduced when you need it.
+
+---
+
+### Getting Help
+
+1. **Check this website first** — most questions are answered in the module pages or setup guides
+2. **Check the textbook** — the relevant chapter usually explains the concept
+3. **Ask a classmate** — someone else probably had the same issue
+4. **Email Dr. Leith** — aleith@siue.edu (allow 24 hours Mon-Fri)
+5. **Office hours** — MW 10:00-11:30 AM and 1:30-3:00 PM, Dunham Hall 1017

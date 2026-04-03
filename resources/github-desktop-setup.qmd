@@ -1,0 +1,105 @@
+---
+title: "GitHub Desktop Setup"
+---
+
+## GitHub Desktop: Version Control Without the Command Line
+
+GitHub Desktop is a free application that lets you manage your git repositories with a visual interface. You will use it to push your journal entries and project files to GitHub each week — building a commit history that demonstrates your progress across the semester.
+
+**Time needed:** 10 minutes
+
+---
+
+## Step 1: Download and Install
+
+1. Visit [desktop.github.com](https://desktop.github.com/)
+2. Download the installer for your operating system (Windows or Mac)
+3. Run the installer — it requires no special configuration
+4. When prompted, sign in with your GitHub account (the one you created in Week 1)
+
+---
+
+## Step 2: Create a Repository from Your Methods Vault
+
+Your Methods Vault is a folder of Markdown files. GitHub Desktop can turn it into a git repository.
+
+1. Open GitHub Desktop
+2. Click **File > Add Local Repository** (or **File > New Repository** if this is your first time)
+3. Navigate to your Methods Vault folder and select it
+4. If prompted, choose **Create a Repository** — accept the defaults
+5. You should now see your vault files listed in the "Changes" tab
+
+---
+
+## Step 3: Make Your First Commit
+
+A **commit** is a snapshot of your work at a specific point in time. Think of it as saving a version.
+
+1. In GitHub Desktop, you should see all your vault files listed as "Changes"
+2. In the **Summary** field at the bottom left, type: `Initial vault setup`
+3. Click **Commit to main**
+4. Your files are now tracked by git
+
+---
+
+## Step 4: Publish to GitHub
+
+**Publishing** uploads your repository to GitHub so it is accessible online.
+
+1. Click the **Publish repository** button in the top bar
+2. **Name:** Use something like `methods-vault` or `mc451-vault`
+3. **Keep this code private:** Uncheck this box (your repository should be public)
+4. Click **Publish Repository**
+5. Your vault is now live at `https://github.com/YOUR-USERNAME/YOUR-REPO-NAME`
+
+---
+
+## Weekly Workflow: Push Your Journal
+
+After writing each journal entry in Obsidian:
+
+1. Open GitHub Desktop — it will automatically detect the new/changed files
+2. Review the changes in the "Changes" tab (you should see your new journal entry)
+3. Type a commit message: `Week 3 journal` (or similar)
+4. Click **Commit to main**
+5. Click **Push origin** in the top bar
+
+Your journal entry is now on GitHub. Your instructor can see your commit history, and you are building a visible record of consistent work.
+
+---
+
+## Key Vocabulary
+
+| Term | What It Means |
+|------|--------------|
+| **Repository (repo)** | A folder tracked by git — it knows every change you have made |
+| **Commit** | A saved snapshot of your work with a message describing what changed |
+| **Push** | Upload your commits to GitHub so they are visible online |
+| **Pull** | Download changes from GitHub to your local machine (used when collaborating) |
+| **Branch** | A parallel version of your repository (you will use `main` for this course) |
+
+---
+
+## Troubleshooting
+
+**"Repository not found" when publishing**
+Make sure you are signed into the correct GitHub account in GitHub Desktop (File > Options > Accounts).
+
+**Changes not showing up**
+GitHub Desktop only tracks files inside the repository folder. Make sure your journal entries are saved inside your Methods Vault folder, not somewhere else.
+
+**"Merge conflict" error**
+This happens if you edited a file on GitHub.com and also locally. For this course, always edit locally in Obsidian and push — never edit directly on GitHub.com.
+
+**Large files warning**
+Git works best with text files. Do not commit large data files (CSVs over 50MB, images, PDFs) to your vault repository. Keep those in your `04_Resources/` folder locally but add them to `.gitignore`.
+
+---
+
+## Next Steps
+
+Once your vault is on GitHub:
+
+- **Week 3:** Submit your repository URL for the Project Setup assignment
+- **Every week:** Commit and push your journal entry after writing it
+- **Week 10+:** When R begins, you will already be comfortable with git concepts

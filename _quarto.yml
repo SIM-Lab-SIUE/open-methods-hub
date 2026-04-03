@@ -1,6 +1,6 @@
 project:
   type: website
-  title: "MC Research Methods: The Liaison Program"
+  title: "MC Research Methods: Open Methods Hub"
   output-dir: docs
   render:
     - "*.qmd"
@@ -8,12 +8,14 @@ project:
     - "resources/*.qmd"
 
 website:
-  title: "MC Research Methods: The Liaison Program"
+  title: "MC Research Methods: Open Methods Hub"
   navbar:
     background: primary
     left:
       - text: "Home"
         href: index.qmd
+      - text: "How It Works"
+        href: how-it-works.qmd
       - text: "Get Started"
         href: setup.qmd
       - text: "Syllabus"
@@ -30,6 +32,8 @@ website:
             href: modules/04_analyst/index.qmd
           - text: "Phase V: The Publisher"
             href: modules/05_publisher/index.qmd
+      - text: "MC 501"
+        href: mc501-syllabus.qmd
       - text: "Resources"
         href: resources/index.qmd
 

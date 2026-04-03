@@ -25,7 +25,7 @@ $navbar-bg: #003D66;
 /*-- scss:rules --*/
 
 /* ============================================
-   MC Research Methods: The Liaison Program
+   MC Research Methods: Open Methods Hub
    Custom Styling & Branding
    Modernized with Okabe-Ito accessible palette
    ============================================ */
@@ -708,6 +708,54 @@ figcaption,
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
   }
+}
+
+/* ============================================
+   Print Styles
+   ============================================ */
+
+/* ============================================
+   Accessibility: Focus Styles
+   ============================================ */
+
+*:focus-visible {
+  outline: 3px solid #E69F00;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Skip-to-content link (visually hidden until focused) */
+.skip-to-content {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  z-index: 9999;
+  background: #003D66;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.skip-to-content:focus {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: auto;
+  height: auto;
+  overflow: visible;
+}
+
+/* ============================================
+   Accessibility: Content Readability
+   ============================================ */
+
+.content-body,
+.quarto-body main {
+  max-width: 42em;
 }
 
 /* ============================================

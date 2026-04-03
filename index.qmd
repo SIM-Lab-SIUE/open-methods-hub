@@ -3,7 +3,7 @@ title: "Home"
 ---
 
 ::: hero-section
-# MC Research Methods: The Liaison Program
+# MC Research Methods: Open Methods Hub
 
 **Bridging Data Science and Creative Communication**
 
@@ -28,7 +28,7 @@ MC 451 teaches you to think like a researcher: ask precise questions, design rig
 
 ### New Student? Start Here
 
-Complete your workspace setup and download your Liaison Vault (15 minutes).
+Complete your workspace setup and download your Methods Vault (15 minutes).
 
 [Get Started](setup.qmd){.btn .btn-primary .btn-lg}
 :::
@@ -70,5 +70,5 @@ Review course policies, the 17-week schedule, and grading information.
 [View Full Syllabus](syllabus.qmd){.btn .btn-primary}
 
 ::: callout-info
-**Ready to dive in?** Start with the [Setup Guide](setup.qmd) — it takes about 15 minutes to configure your workspace and download your Liaison Vault.
+**Ready to dive in?** Start with the [Setup Guide](setup.qmd) — it takes about 15 minutes to configure your workspace and download your Methods Vault.
 :::

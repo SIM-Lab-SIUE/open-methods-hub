@@ -19,21 +19,21 @@ Obsidian is a powerful note-taking and knowledge management app that stores all 
 
 ## Step 2: Open Your First Vault
 
-A **vault** is a folder that Obsidian manages. The Liaison Program provides a pre-configured vault.
+A **vault** is a folder that Obsidian manages. Open Methods Hub provides a pre-configured vault.
 
-### 2.1 Extract the Liaison Vault
+### 2.1 Extract the Methods Vault
 
-1. Download **Liaison_Vault.zip** from the [Resources page](resources/)
+1. Download **Methods_Vault.zip** from the [Resources page](resources/)
 2. Extract it to a location like:
-   - **Windows**: `C:\Users\YourName\Documents\Liaison_Vault`
-   - **Mac**: `~/Documents/Liaison_Vault`
-   - **Linux**: `~/Documents/Liaison_Vault`
+   - **Windows**: `C:\Users\YourName\Documents\Methods_Vault`
+   - **Mac**: `~/Documents/Methods_Vault`
+   - **Linux**: `~/Documents/Methods_Vault`
 
 ### 2.2 Open the Vault in Obsidian
 
 1. Open Obsidian
 2. Click **Open folder as vault**
-3. Navigate to where you extracted `Liaison_Vault` and select it
+3. Navigate to where you extracted `Methods_Vault` and select it
 4. Click **Open**
 
 Obsidian will now show your vault with all the pre-configured folders and templates!
@@ -93,7 +93,7 @@ Now you can view and edit `.qmd` files just like regular markdown files!
 
 ### 4.3 Other Useful Plugins
 
-Here are some community plugins that work great with the Liaison Program:
+Here are some community plugins that work great with the Open Methods Hub:
 
 | Plugin | What It Does |
 |--------|--------------|
@@ -182,7 +182,7 @@ In **Settings → About**, you'll see sync options:
 - **Git**: Use Git to version control your vault (recommended for this course!)
 - **Manual backups**: Copy your vault folder regularly
 
-For the Liaison Program, using **Git** is recommended so you can version control your work.
+For the Open Methods Hub, using **Git** is recommended so you can version control your work.
 
 ---
 
@@ -225,7 +225,7 @@ Let's practice:
 
 ## Goals
 
-1. Complete the Liaison Program
+1. Complete the Open Methods Hub
 2. Master data analysis
 3. Tell stories with data
 ```
@@ -267,7 +267,7 @@ Don't over-customize at first. Start with the default theme and no plugins. Add 
 
 ### Use the Vault Structure
 
-The Liaison_Vault comes pre-organized:
+The Methods_Vault comes pre-organized:
 - **00_Inbox**: Capture ideas quickly here
 - **01_Journal**: Weekly reflections
 - **02_Literature**: Research notes and citations
@@ -285,7 +285,7 @@ git commit -m "Update research notes"
 git push
 ```
 
-Or regularly copy your `Liaison_Vault` folder to an external drive.
+Or regularly copy your `Methods_Vault` folder to an external drive.
 
 ### Embrace Plain Text
 
@@ -323,12 +323,12 @@ If Obsidian feels sluggish:
 ## Next Steps
 
 1. ✅ Install Obsidian
-2. ✅ Extract and open the Liaison_Vault
+2. ✅ Extract and open the Methods_Vault
 3. ✅ Install the **qmd as md** plugin
 4. ✅ Choose a theme you like
 5. ✅ Create your first note
 6. ✅ Explore the vault structure
-7. Start the [Liaison Program](../modules/01_orientation/)!
+7. Start the [Open Methods Hub](../modules/01_orientation/)!
 
 ---
 

@@ -22,9 +22,9 @@ An example of a properly annotated research article, demonstrating the critical 
 
 ### Liaison Obsidian Vault
 
-Your complete workspace for the Liaison Program.
+Your complete workspace for the Open Methods Hub.
 
-**[📥 Download Liaison_Vault.zip](Liaison_Vault.zip){.btn .btn-primary .btn-lg}**
+**[📥 Download Methods_Vault.zip](Methods_Vault.zip){.btn .btn-primary .btn-lg}**
 
 **What's Included:**
 - 📁 **00_Inbox** - Quick capture area
@@ -66,14 +66,25 @@ Personal knowledge management system
 :::
 
 ::: {.card}
-### 🐙 GitHub
+### GitHub
 
 Version control and collaboration
 
 <span class="resource-badge">Free</span>
 
-[Sign Up](https://github.com/signup){.btn .btn-secondary}  
-[Setup Guide](../github-setup.qmd){.btn .btn-sm}
+[Sign Up](https://github.com/signup){.btn .btn-secondary}
+[Setup Guide](github-setup.qmd){.btn .btn-sm}
+:::
+
+::: {.card}
+### GitHub Desktop
+
+Visual git interface (no command line)
+
+<span class="resource-badge">Free</span>
+
+[Download](https://desktop.github.com/){.btn .btn-secondary}
+[Setup Guide](github-desktop-setup.qmd){.btn .btn-sm}
 :::
 
 ::: {.card}
@@ -176,7 +187,7 @@ Use this each week to reflect on your learning using one of three thinking paths
 - **The Troubleshooter** - What problems did I solve?
 - **The Critic** - Does this match my experience?
 
-[View Template](../Liaison_Vault/99_Templates/Weekly_Journal_Template.md){.btn .btn-sm .btn-secondary}
+[View Template](../Methods_Vault/99_Templates/Weekly_Journal_Template.md){.btn .btn-sm .btn-secondary}
 :::
 
 :::{.resource-card}
@@ -187,7 +198,7 @@ Use this each week to reflect on your learning using one of three thinking paths
 Define your variables and create your codebook in Phase 3. Includes columns for:
 - Variable name, definition, type, allowed values, and examples
 
-[View Template](../Liaison_Vault/99_Templates/Data_Dictionary_Template.md){.btn .btn-sm .btn-secondary}
+[View Template](../Methods_Vault/99_Templates/Data_Dictionary_Template.md){.btn .btn-sm .btn-secondary}
 :::
 
 :::{.resource-card}
@@ -197,7 +208,7 @@ Define your variables and create your codebook in Phase 3. Includes columns for:
 
 Start here for an overview of your vault structure and folder purposes.
 
-[View File](../Liaison_Vault/00_START_HERE.md){.btn .btn-sm .btn-secondary}
+[View File](../Methods_Vault/00_START_HERE.md){.btn .btn-sm .btn-secondary}
 :::
 
 ---
@@ -279,7 +290,7 @@ A: Yes, Excel works for basic analysis. R is recommended for more complex projec
 A: Obsidian is recommended but optional. The course works with Notion, OneNote, or even physical notebooks.
 
 **Q: Where do I turn in my work?**  
-A: Save deliverables in your Liaison_Vault under `03_Project/`. Dr. Leith will collect via email or learning management system.
+A: Save deliverables in your Methods_Vault under `03_Project/`. Dr. Leith will collect via email or learning management system.
 
 **Q: Can I work with others?**  
 A: Absolutely! Pair programming and collaborative analysis are encouraged. Document who contributed what.

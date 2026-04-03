@@ -41,14 +41,14 @@ Students complete a two-part content analysis project across the semester: a qua
 
 ## Course Structure: The Five Phases
 
-### Phase I: The Journalist (Weeks 1–4) — 150 points
-- Weekly Reading Journal (150 pts)
+### Phase I: The Journalist (Weeks 1–15) — 150 points
+- Weekly Reading Journal (10 pts/week x 14 teaching weeks + 10 pts consistency = 150 pts)
 
 ### Phase II: The Architect (Weeks 2–4) — 125 points
 - GitHub Profile (25 pts)
 - Syllabus Contract (25 pts)
 - Project Setup (25 pts)
-- Archivist Report (25 pts)
+- Librarian Visit Report (50 pts)
 
 ### Phase III: The Builder (Weeks 5–12) — 250 points
 - Annotated Manuscript (25 pts)
@@ -57,7 +57,7 @@ Students complete a two-part content analysis project across the semester: a qua
 - Definitions Practice (25 pts)
 - Codebook & Qual Memo (50 pts)
 - Sampling Plan & Pilot (75 pts)
-- CITI Ethics Certification (50 pts)
+- CITI Ethics Certification (25 pts)
 
 ### Phase IV: The Analyst (Weeks 13–15) — 225 points
 - Data Wrangling [R] (50 pts)
@@ -128,7 +128,7 @@ Per the SIUE Student Academic Code (3C2), plagiarism and cheating will not be to
 | 1 | Aug 24 | Syllabus and Introductions | GitHub Profile |
 | 2 | Aug 31 | Ch 1–2: Curiosity & Trust | Syllabus Contract |
 | 3 | Sep 07 | Ch 3–4: Reading Protocol & The Archivist | Project Setup |
-| 4 | Sep 14 | Ch 5–6: Choosing Your Lens & The Roadmap | Archivist Report |
+| 4 | Sep 14 | Ch 5–6: Choosing Your Lens & The Roadmap | Librarian Visit Report |
 | 5 | Sep 21 | Ch 7–8: Research Question & Ethics | Annotated Manuscript |
 | 6 | Sep 28 | Ch 9–10: Toolkit & Qualitative Methods | Project Prospectus |
 | 7 | Oct 05 | Ch 11–12: Surveys & Experiments | Topic Selection (RQs) |
@@ -182,7 +182,7 @@ Contact Accessible Campus Community and Equitable Student Support:
 
 - **Textbook** — [From Vibes to Variables](https://sim-lab-siue.github.io/vibes-to-variables/) (free, online)
 - **coursepackR** — R package with datasets, templates, and setup tools
-- **Liaison Vault** — Obsidian workspace template (download on [Resources](resources/) page)
+- **Methods Vault** — Obsidian workspace template (download on [Resources](resources/) page)
 - **Weekly Templates** — Available via `coursepackR::download_week()`
 
 ### Getting Help

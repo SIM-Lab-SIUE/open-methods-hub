@@ -2,7 +2,7 @@
 title: "Getting Started"
 ---
 
-## Welcome to the Liaison Program
+## Welcome to the Open Methods Hub
 
 Complete these four steps to set up your workspace. **Time needed:** 15-20 minutes.
 
@@ -16,11 +16,11 @@ Make sure you have a reliable internet connection and about 500 MB of free disk 
 ## Step 1: Download Your Workspace
 
 1. Visit the [Resources page](resources/index.qmd)
-2. Click **Download Liaison_Vault.zip**
+2. Click **Download Methods_Vault.zip**
 3. Extract the ZIP file to:
-   - **Windows**: `C:\Users\YourName\Documents\Liaison_Vault`
-   - **Mac**: `~/Documents/Liaison_Vault`
-   - **Linux**: `~/Documents/Liaison_Vault`
+   - **Windows**: `C:\Users\YourName\Documents\Methods_Vault`
+   - **Mac**: `~/Documents/Methods_Vault`
+   - **Linux**: `~/Documents/Methods_Vault`
 
 ---
 
@@ -30,7 +30,7 @@ Make sure you have a reliable internet connection and about 500 MB of free disk 
 2. Download Obsidian for your operating system
 3. Install and open Obsidian
 4. Click **"Open folder as vault"**
-5. Navigate to your `Liaison_Vault` folder and select it
+5. Navigate to your `Methods_Vault` folder and select it
 
 **Your vault will open with folders, templates, and a start guide ready to go.**
 

@@ -27,7 +27,7 @@ By the end of Phase V, you will:
 
 ## Phase V Overview
 
-Every assignment this semester has been a building block. The Reading Journals sharpened your thinking. The Archivist Report confirmed your data source. The Prospectus gave you a roadmap. The Codebook gave you a rulebook. The R assignments turned raw codes into tables, charts, and tests. Now you assemble all of it into a single, coherent research report — published simultaneously as a PDF and a live website.
+Every assignment this semester has been a building block. The Reading Journals sharpened your thinking. The Librarian Visit Report confirmed your data source. The Prospectus gave you a roadmap. The Codebook gave you a rulebook. The R assignments turned raw codes into tables, charts, and tests. Now you assemble all of it into a single, coherent research report — published simultaneously as a PDF and a live website.
 
 Your final portfolio presents a two-part content analysis:
 
@@ -90,7 +90,7 @@ The starter project includes pre-written R code for all three tests. Keep the on
 
 ## Submission
 
-Submit both to Blackboard by **Friday, May 8, 2026 at 11:59 pm**:
+Submit both to Blackboard by **Friday, December 19, 2026 at 11:59 pm**:
 
 1. **PDF file** — rename to `Lastname_FinalPortfolio.pdf`
 2. **Live URL** — your GitHub Pages link

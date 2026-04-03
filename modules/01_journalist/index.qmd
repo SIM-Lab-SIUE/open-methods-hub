@@ -5,7 +5,7 @@ title: "Phase I: The Journalist"
 :::{.phase-header}
 # Phase I: The Journalist
 
-**Duration:** Weeks 1–4 | **Points:** 150
+**Duration:** Weeks 1–15 (every teaching week) | **Points:** 150
 Develop your voice through weekly reading reflections
 :::
 
@@ -49,9 +49,9 @@ In this phase, you develop the habits of a research journalist: reading critical
 
 ---
 
-## Assignment: Weekly Reading Journal (150 pts)
+## Assignment: Weekly Reading Journal (150 pts total)
 
-**Due:** Every Friday by 11:59 PM | **Length:** 250–300 words per entry
+**Due:** Every Friday by 11:59 PM | **Length:** 250–300 words per entry | **Scoring:** 10 pts/week x 14 teaching weeks + 10 pts for consistency across the semester
 
 Each week, write a reflection on the assigned reading. Choose one of three thinking paths:
 
