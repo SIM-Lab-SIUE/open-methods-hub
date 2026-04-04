@@ -1,0 +1,239 @@
+---
+title: "Publishing Your Research: Quarto Books & GitHub Pages"
+execute:
+  eval: false
+  echo: true
+---
+
+# Publishing Your Research: Quarto Books & GitHub Pages
+
+{{< video videos/07-publishing.mp4 >}}
+
+You've collected data, cleaned it, visualized it, and tested a hypothesis. Now you assemble everything into a professional research report — published simultaneously as a PDF and a live website.
+
+This chapter walks you through the **final project template** (`mc451-final-project.zip`) and shows you how each piece connects to the work you've already done.
+
+## What You're Building
+
+Your final portfolio is a **Quarto Book** — a collection of `.qmd` files that Quarto renders into a single, cohesive document. One command (`quarto render`) produces:
+
+1. **A PDF** — print-ready, submitted to Blackboard
+2. **A website** — hosted free on GitHub Pages, accessible to anyone with the link
+
+This is real academic publishing. Graduate students, researchers, and data journalists use this exact workflow.
+
+## The Template: File by File
+
+When you download and unzip `mc451-final-project.zip`, you'll find this structure:
+
+```
+mc451-final-project/
+├── _quarto.yml          ← Master configuration file
+├── index.qmd            ← Abstract (write this LAST)
+├── 01-introduction.qmd  ← Background, theory, research questions
+├── 02-methodology.qmd   ← Data source, sampling, variables, pilot
+├── 03-results.qmd       ← R code + output (tables, charts, chi-square)
+├── 04-discussion.qmd    ← Interpretation, limitations, conclusion
+├── references.qmd       ← Auto-generated bibliography
+├── references.bib       ← Your citations (from Zotero)
+├── custom.css           ← Website styling
+├── mc451-final-project.Rproj  ← RStudio project file
+└── README.md            ← Setup and publishing instructions
+```
+
+### How the Files Map to Your Prior Work
+
+| Template File | What to Write | Where It Comes From |
+|--------------|---------------|-------------------|
+| `01-introduction.qmd` | Topic background, theory, 2 research questions | Project Prospectus + Topic Selection & RQs |
+| `02-methodology.qmd` | Data source, sampling strategy, variable definitions, pilot findings | Codebook & Qual Memo + Sampling Plan & Pilot |
+| `03-results.qmd` | Frequency table, bar chart, chi-square test | Data Wrangling + Describing Data + Inferencing Data |
+| `04-discussion.qmd` | Answer your RQs, connect to theory, list 3+ limitations | Your own analysis and reflection |
+| `index.qmd` | 150-word abstract summarizing the entire report | Write this LAST |
+| `references.bib` | BibTeX citations for all sources | Export from Zotero |
+
+::: {.callout-important}
+## You Are Not Starting from Scratch
+
+Every section of the final portfolio draws from an assignment you've already completed. This is assembly and revision — not new writing. Your Introduction comes from your Prospectus. Your Methodology comes from your Codebook and Sampling Plan. Your Results come from your three R assignments.
+:::
+
+## Setup: Getting the Template Running
+
+### Step 1: Download and Open
+
+1. Download `mc451-final-project.zip` from Blackboard
+2. Unzip it to a location you can find (e.g., Documents or your MC451 project folder)
+3. Open the `.Rproj` file in RStudio — this sets the working directory correctly
+
+### Step 2: Install Required Packages
+
+In the RStudio Console, run:
+
+```r
+install.packages(c("tidyverse", "knitr", "kableExtra", "scales"))
+```
+
+### Step 3: Place Your Data
+
+Copy your cleaned `.RDS` file (from Chapter 4 / the Data Wrangling assignment) into the project folder. The template's `03-results.qmd` expects a file called `coding_data_clean.RDS` — rename yours to match, or update the filename in the code.
+
+### Step 4: First Render
+
+In RStudio's Terminal (not the Console), type:
+
+```bash
+quarto render
+```
+
+Or click the **Render** button while any `.qmd` file is open. Quarto will:
+
+- Run all R code in `03-results.qmd`
+- Combine all chapters into a single document
+- Produce a PDF and HTML website in the `docs/` folder
+
+If it works, you'll see a `docs/` folder appear with your rendered files. If it doesn't, check the error message — it will tell you exactly which line failed.
+
+## Writing Each Section
+
+### Introduction (01-introduction.qmd) — 500–700 words
+
+**Structure:**
+
+1. **Opening hook** (2–3 sentences): Why should anyone care about your topic? Start with a concrete example or a surprising fact.
+2. **Background** (1–2 paragraphs): What do we already know? Cite your sources using `@citationkey` syntax (Quarto auto-generates the reference list).
+3. **Theory** (1 paragraph): Which communication theory frames your study? How does it connect to your variables?
+4. **Research Questions** (list): State both RQs exactly as you wrote them in your Topic Selection & RQs assignment.
+
+**Source:** Pull from your Project Prospectus and Topic Selection assignments. Revise for flow — these were separate assignments, so connecting them into a single narrative takes some editing.
+
+### Methodology (02-methodology.qmd) — 400–600 words
+
+**Structure:**
+
+1. **Data source** (1 paragraph): What media content did you analyze? Where did you find it? What time period?
+2. **Sampling strategy** (1 paragraph): How did you select your sample? What was the population? What was the final sample size?
+3. **Variables** (1–2 paragraphs): Define each variable — conceptual and operational definitions. This comes directly from your codebook.
+4. **Pilot findings** (1 paragraph): What did you learn from the pilot test? What changes did you make to the codebook?
+
+**Source:** Pull from your Codebook & Qual Memo and Sampling Plan & Pilot assignments.
+
+### Results (03-results.qmd) — Code + Interpretation
+
+The template includes pre-written R code with placeholder variable names. You need to:
+
+1. Replace `var1` and `var2` with your actual variable names
+2. Update the `readRDS()` call to point to your `.RDS` file
+3. Add your interpretation paragraphs between the code chunks
+
+The Results section includes three components:
+
+| Component | What to Include | Source Assignment |
+|-----------|----------------|-------------------|
+| Frequency table | `knitr::kable()` formatted table with counts and percentages | Describing Data |
+| Bar chart | `ggplot2` publication-ready chart | Describing Data |
+| Chi-square test | APA-format results + journalist translation | Inferencing Data |
+
+::: {.callout-tip}
+## Don't Reinvent the Wheel
+
+The R code in your graded assignments is the foundation. Copy your working code from the Describing Data and Inferencing Data assignments into the template. Adjust variable names as needed. The template provides scaffolding, but your tested code is more reliable.
+:::
+
+### Discussion (04-discussion.qmd) — 400–500 words
+
+**Structure:**
+
+1. **Answer your RQs** (1 paragraph each): Directly address each research question with evidence from your results.
+2. **Connect to theory** (1 paragraph): How do your findings relate to the theory you introduced?
+3. **Limitations** (at least 3): Be specific. "Small sample size" is generic. "The sample included only Billboard-charting songs, which may not represent independent or international releases" is specific and useful.
+4. **Conclusion** (2–3 sentences): What's the takeaway? What should future researchers investigate?
+
+### Abstract (index.qmd) — ~150 words
+
+Write this **last**. The abstract summarizes the entire report in one paragraph:
+- What you studied (1 sentence)
+- How you studied it (1 sentence)
+- What you found (2–3 sentences)
+- Why it matters (1 sentence)
+
+## Publishing to GitHub Pages
+
+### Step 1: Create a GitHub Repository
+
+1. Go to [github.com](https://github.com) and sign in
+2. Click **New Repository** (the green button or the + icon)
+3. Name it something descriptive (e.g., `mc451-final-portfolio`)
+4. Set it to **Public** (GitHub Pages requires a public repo on free accounts)
+5. Do NOT add a README, .gitignore, or license (the template already has these)
+6. Click **Create Repository**
+
+### Step 2: Push Your Project
+
+In RStudio's Terminal, run these commands (replace the URL with your repo's URL):
+
+```bash
+git init
+git add .
+git commit -m "Initial portfolio commit"
+git branch -M main
+git remote add origin https://github.com/YOUR-USERNAME/mc451-final-portfolio.git
+git push -u origin main
+```
+
+### Step 3: Enable GitHub Pages
+
+1. Go to your repository on GitHub
+2. Click **Settings** (tab at the top)
+3. Scroll down to **Pages** (in the left sidebar)
+4. Under "Source," select **Deploy from a branch**
+5. Set Branch to `main` and Folder to `/docs`
+6. Click **Save**
+
+### Step 4: Wait and Test
+
+GitHub Pages takes 1–2 minutes to build. Your site will be available at:
+
+```
+https://YOUR-USERNAME.github.io/mc451-final-portfolio/
+```
+
+Test it in an **incognito/private window** to make sure it works for someone who isn't logged into your GitHub account.
+
+::: {.callout-warning}
+## The Most Common Last-Minute Problem
+
+Broken GitHub Pages link. This usually happens because:
+
+1. The `docs/` folder wasn't pushed (run `git add docs/ && git commit -m "add docs" && git push`)
+2. GitHub Pages source is set wrong (should be `main` branch, `/docs` folder)
+3. You haven't waited long enough (give it 2 minutes)
+
+Test in incognito before submitting.
+:::
+
+## Submission Checklist
+
+- [ ] All five `.qmd` files are complete and written in your own words
+- [ ] `references.bib` contains all your citations (exported from Zotero)
+- [ ] `quarto render` produces both PDF and HTML without errors
+- [ ] PDF is in the `docs/` folder and looks correct
+- [ ] Website is in the `docs/` folder and displays all sections
+- [ ] GitHub repo is public and contains the `docs/` folder
+- [ ] GitHub Pages is enabled and the site loads in an incognito window
+- [ ] PDF renamed to `Lastname_FinalPortfolio.pdf` and uploaded to Blackboard
+- [ ] GitHub Pages URL pasted into Blackboard submission text
+
+## Try It Yourself
+
+1. **Download the template** and open it as an RStudio project.
+2. **Run `quarto render`** without making any changes. Does it produce output in the `docs/` folder?
+3. **Read each `.qmd` file** and identify which of your prior assignments provides the content for each section.
+4. **Replace one placeholder** in `03-results.qmd` with a real variable name from your dataset. Re-render and check the output.
+5. **Set up a GitHub repository** and push the template. Enable Pages and verify the site loads.
+
+::: {.callout-tip}
+## Connection to Your Project
+
+This is it — the final deliverable. Everything you've learned in this workbook feeds into this Quarto Book. Chapters 1–2 prepared your data. Chapters 3–6 taught you the R skills. This chapter assembles the final product. When you're done, you'll have a live research website and a professional PDF — real artifacts for a graduate school application or a job portfolio.
+:::

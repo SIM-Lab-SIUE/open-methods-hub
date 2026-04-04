@@ -759,6 +759,40 @@ figcaption,
 }
 
 /* ============================================
+   Workbook Video Embeds
+   ============================================ */
+
+.quarto-video {
+  width: 100%;
+  max-width: 960px;
+  margin: 1.5rem auto;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.quarto-video video {
+  width: 100%;
+  display: block;
+}
+
+/* ============================================
+   Workbook Sidebar
+   ============================================ */
+
+.sidebar nav[role="navigation"] {
+  border-right: 2px solid #D1D5DB;
+}
+
+.sidebar .sidebar-title {
+  font-weight: 700;
+  color: #003D66;
+  font-size: 1.1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid $secondary;
+}
+
+/* ============================================
    Print Styles
    ============================================ */
 

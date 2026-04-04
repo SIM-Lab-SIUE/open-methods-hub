@@ -1,0 +1,260 @@
+---
+title: "Inferencing Data: Testing Relationships"
+execute:
+  eval: false
+  echo: true
+---
+
+# Inferencing Data: Testing Relationships
+
+{{< video videos/06-inferencing-data.mp4 >}}
+
+Describing data tells you what *is*. Inferencing tells you what it *means* — specifically, whether the patterns you see are real or could have happened by chance.
+
+This chapter walks you through a **chi-square test of independence** — the statistical test you'll use to determine whether two categorical variables are related. You'll also learn to calculate effect size (Cramér's V), interpret standardized residuals, and write your findings in two registers: formal APA and plain-English "journalist translation."
+
+## The Big Question
+
+Look at the stacked bar chart from Chapter 5. The proportion of major vs. minor mode appears to differ across genres. But is that difference *real*, or is it just noise in the data?
+
+This is what statistical inference answers. We set up a test, let the math run, and then interpret the result.
+
+## Step 1: State Your Hypotheses (Before Any Code)
+
+::: {.callout-important}
+## Hypotheses Come First
+
+Write your hypotheses *before* you run any code. This is not optional — it's how science works. You decide what you're testing, then test it. You don't look at the results and then decide what you were testing.
+:::
+
+Every chi-square test has two hypotheses:
+
+**Null Hypothesis (H₀):** There is no relationship between the two variables. Any differences you see are due to chance.
+
+> H₀: There is no association between playlist genre and musical mode.
+
+**Alternative Hypothesis (H₁):** There is a relationship between the two variables. The differences are too large to be explained by chance alone.
+
+> H₁: There is an association between playlist genre and musical mode.
+
+The chi-square test evaluates how much the observed data differs from what you'd expect if H₀ were true.
+
+## Step 2: Build the Contingency Table
+
+```{r}
+#| label: setup
+
+library(tidyverse)
+
+# Load clean data
+music <- readRDS("data/music_data_clean.RDS")
+
+# Filter to only rows with valid mode labels
+music_filtered <- music |> filter(!is.na(mode_label))
+```
+
+A contingency table is the raw input for the chi-square test. It shows the count for every combination of your two variables:
+
+```{r}
+#| label: contingency-table
+
+# Build the contingency table using table()
+cont_table <- table(music_filtered$playlist_genre, music_filtered$mode_label)
+cont_table
+```
+
+Now add proportions — this helps you see the pattern before running the test:
+
+```{r}
+#| label: proportional-table
+
+# Row proportions (proportion within each genre)
+prop_table <- prop.table(cont_table, margin = 1)  # margin = 1 means row proportions
+round(prop_table, 3)
+```
+
+Look at the proportions. Do genres differ in their major/minor split? If every genre had roughly the same proportions, there would be no association. If they differ, the chi-square test will tell you whether that difference is statistically significant.
+
+## Step 3: Run the Chi-Square Test
+
+```{r}
+#| label: chi-square-test
+
+# Run the chi-square test of independence
+chi_result <- chisq.test(cont_table)
+chi_result
+```
+
+### Reading the Output
+
+The test gives you three numbers:
+
+| Value | What It Means |
+|-------|--------------|
+| **X-squared** (χ²) | How much the observed data deviates from what you'd expect under H₀. Bigger = more deviation. |
+| **df** | Degrees of freedom — based on the table dimensions: (rows - 1) × (columns - 1) |
+| **p-value** | The probability of seeing data this extreme *if the null hypothesis were true* |
+
+### Interpreting the p-value
+
+The p-value is the most important number. Here's what it means in plain terms:
+
+- **p < .05:** The pattern is statistically significant. The probability of seeing this result by chance (if there's really no relationship) is less than 5%. We reject H₀.
+- **p ≥ .05:** The pattern is not statistically significant. We cannot reject H₀. This doesn't prove there's *no* relationship — just that we don't have enough evidence to claim one.
+
+```{r}
+#| label: interpret-p
+
+# Extract the key values
+cat("Chi-square statistic:", round(chi_result$statistic, 2), "\n")
+cat("Degrees of freedom:", chi_result$parameter, "\n")
+cat("p-value:", format.pval(chi_result$p.value, digits = 3), "\n")
+
+# Is it significant at the .05 level?
+if (chi_result$p.value < .05) {
+  cat("\nResult: SIGNIFICANT — reject the null hypothesis.\n")
+  cat("There is evidence of an association between genre and mode.\n")
+} else {
+  cat("\nResult: NOT SIGNIFICANT — fail to reject the null hypothesis.\n")
+  cat("There is not enough evidence to claim an association between genre and mode.\n")
+}
+```
+
+## Step 4: Calculate Cramér's V (Effect Size)
+
+Statistical significance tells you *whether* there's a relationship. Effect size tells you *how strong* it is. A significant result with a tiny effect size means the relationship is real but practically unimportant.
+
+Cramér's V ranges from 0 (no association) to 1 (perfect association):
+
+```{r}
+#| label: cramers-v
+
+# Calculate Cramér's V manually
+chi_sq <- as.numeric(chi_result$statistic)
+n <- sum(cont_table)
+k <- min(nrow(cont_table), ncol(cont_table))  # smaller dimension
+
+cramers_v <- sqrt(chi_sq / (n * (k - 1)))
+cat("Cramér's V:", round(cramers_v, 3), "\n")
+```
+
+### Effect Size Benchmarks (Cohen's Guidelines)
+
+| Cramér's V | Interpretation |
+|------------|---------------|
+| .10 | Small effect |
+| .30 | Medium effect |
+| .50 | Large effect |
+
+A small effect means the relationship exists but is weak. A large effect means the variables are strongly associated. Most social science research finds small-to-medium effects — that's normal and expected.
+
+```{r}
+#| label: interpret-effect
+
+# Interpret the effect size
+cat("Cramér's V =", round(cramers_v, 3), "\n")
+if (cramers_v < .10) {
+  cat("Interpretation: Negligible effect\n")
+} else if (cramers_v < .30) {
+  cat("Interpretation: Small effect\n")
+} else if (cramers_v < .50) {
+  cat("Interpretation: Medium effect\n")
+} else {
+  cat("Interpretation: Large effect\n")
+}
+```
+
+## Step 5: Standardized Residuals
+
+The chi-square test tells you there's a relationship (or not), but it doesn't tell you *which specific combinations* are driving it. Standardized residuals do.
+
+A standardized residual tells you, for each cell in the table, how much the observed count differs from what you'd expect:
+
+- **Residual > 2:** This cell has *more* observations than expected (strong positive contribution)
+- **Residual < -2:** This cell has *fewer* observations than expected (strong negative contribution)
+- **Residual between -2 and 2:** This cell is roughly what you'd expect
+
+```{r}
+#| label: residuals
+
+# Get standardized residuals
+residuals <- chi_result$stdres
+round(residuals, 2)
+```
+
+```{r}
+#| label: notable-residuals
+
+# Identify cells with residuals > |2|
+residual_df <- as.data.frame(as.table(residuals))
+names(residual_df) <- c("genre", "mode", "residual")
+
+residual_df |>
+  filter(abs(residual) > 2) |>
+  arrange(desc(abs(residual)))
+```
+
+These are the combinations driving the result. For example, if "rock" × "minor" has a residual of +3.5, that means rock has significantly more minor-mode songs than you'd expect by chance. That's a finding you can write about.
+
+## Step 6: Write It Up — APA Format
+
+Academic writing uses the American Psychological Association (APA) format for reporting statistical results. Here's the template:
+
+> A chi-square test of independence was conducted to examine the relationship between [Variable 1] and [Variable 2]. The analysis revealed a [significant/non-significant] association, χ²([df]) = [X.XX], *p* [< .001 / = .XXX]. The effect size was [small/medium/large] (Cramér's V = [.XXX]). Examination of standardized residuals indicated that [specific finding about which cells deviated from expected values].
+
+```{r}
+#| label: apa-template
+
+# Generate the APA results sentence automatically
+cat(sprintf(
+  "χ²(%d) = %.2f, p %s, Cramér's V = %.3f",
+  chi_result$parameter,
+  chi_result$statistic,
+  ifelse(chi_result$p.value < .001, "< .001", sprintf("= %.3f", chi_result$p.value)),
+  cramers_v
+))
+```
+
+## Step 7: The Journalist Translation
+
+This is the most important paragraph you'll write in this assignment — and arguably in the entire course. Communication students need to explain statistics to people who have never taken a research methods class.
+
+**The rule:** No jargon. No p-values. No chi-square. No "statistically significant." Just plain English.
+
+**Template:**
+
+> This analysis asked whether [plain-English version of the research question]. After examining [sample size] [items], the data [showed/did not show] a clear pattern: [describe the key finding in concrete terms]. In practical terms, this means [so-what statement — why does this matter?].
+
+**Example:**
+
+> This analysis asked whether certain music genres tend to favor major (happy-sounding) or minor (sad-sounding) keys. After examining nearly 1,800 songs from the Billboard charts, the data showed a clear pattern: genres differ meaningfully in their use of major vs. minor keys. Pop and latin songs lean heavily toward major keys, while rock and R&B include a higher proportion of minor-key tracks. For music producers and playlist curators, this suggests that key choice is partly a genre convention — not just an artistic decision.
+
+::: {.callout-important}
+## Both Paragraphs Are Required
+
+The APA paragraph is for researchers. The journalist translation is for everyone else. You need both in your assignment and in your final portfolio. Being able to write in both registers is what makes a communication researcher different from a statistics student.
+:::
+
+## Try It Yourself
+
+These exercises map directly to the Inferencing Data [R] assignment:
+
+1. **Write your hypotheses** for the genre × mode relationship *before* looking at any output.
+
+2. **Build a contingency table** and its proportional version. Which genres have the most extreme proportions?
+
+3. **Run the chi-square test.** Report the χ², df, and p-value.
+
+4. **Calculate Cramér's V** and interpret its magnitude using Cohen's benchmarks.
+
+5. **Examine standardized residuals.** Which genre-mode combinations are driving the result? Why do you think that might be?
+
+6. **Write the APA results paragraph** using the template above.
+
+7. **Write the journalist translation** — explain the finding to someone who has never taken a statistics course.
+
+::: {.callout-tip}
+## Connection to Your Project
+
+For your final portfolio, you'll run this exact test on your own variables. The code is the same — only the variable names change. Your Results section needs both the frequency table/bar chart from Chapter 5 *and* the chi-square test from this chapter. Together, they tell the complete story: here's what the data looks like (descriptive) and here's what it means (inferential).
+:::

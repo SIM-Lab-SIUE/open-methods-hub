@@ -1,0 +1,208 @@
+---
+title: "Meet R and RStudio"
+execute:
+  eval: false
+  echo: true
+---
+
+# Meet R and RStudio
+
+{{< video videos/03-meet-r.mp4 >}}
+
+You have a codebook. You have (or will soon have) a dataset. Now you need a tool to analyze it. That tool is R — a free, open-source programming language built for data analysis and statistics. This chapter gets you set up and comfortable before the real work begins.
+
+## Why R?
+
+You might be wondering: *Why can't I just use Excel?* You can do some of this in Excel. But R gives you three things Excel doesn't:
+
+1. **Reproducibility.** Every step of your analysis is written as code. You can re-run it, share it, and verify it. In Excel, clicking through menus leaves no trail.
+2. **Publication-ready output.** R + Quarto renders your analysis directly into a professional PDF or website. No copy-pasting charts into Word.
+3. **Statistical power.** R handles chi-square tests, effect sizes, and visualizations that would require expensive add-ons in Excel.
+
+You're not becoming a programmer. You're learning to use a specific tool for a specific purpose: turning your coded data into findings you can communicate.
+
+## The RStudio Interface
+
+When you open RStudio, you'll see four panels (called "panes"):
+
+```
+┌─────────────────────┬─────────────────────┐
+│                     │                     │
+│   Source Editor     │   Environment       │
+│   (where you write  │   (your data and    │
+│    code in .qmd     │    variables live    │
+│    files)           │    here)            │
+│                     │                     │
+├─────────────────────┼─────────────────────┤
+│                     │                     │
+│   Console           │   Files / Plots /   │
+│   (where code runs  │   Help / Viewer     │
+│    and output       │   (file browser,    │
+│    appears)         │    charts, docs)    │
+│                     │                     │
+└─────────────────────┴─────────────────────┘
+```
+
+- **Source Editor** (top-left): Where you write and edit your `.qmd` files. This is where most of your work happens.
+- **Console** (bottom-left): Where R actually runs your code. You can type commands here directly, but usually you'll run code from the Source Editor.
+- **Environment** (top-right): Shows you what data and variables R currently has loaded. When you import a dataset, it appears here.
+- **Files/Plots/Help** (bottom-right): A multi-purpose panel. The Files tab is a file browser. The Plots tab shows your charts. The Help tab shows documentation.
+
+## Setting Up Your Environment
+
+Let's verify everything works. Complete these steps in order — don't skip ahead.
+
+### Step 1: Verify R is Installed
+
+Open RStudio. In the **Console** (bottom-left), type:
+
+```r
+R.version.string
+```
+
+You should see something like `"R version 4.4.2 (2024-10-31)"`. The exact version doesn't matter as long as it starts with 4.
+
+### Step 2: Install and Load Required Packages
+
+Packages are collections of functions that extend what R can do. You need two:
+
+```r
+# Install packages (only needed once)
+install.packages("tidyverse")
+install.packages("janitor")
+```
+
+This may take a few minutes. You'll see red text scrolling — that's normal. When it's done, load them:
+
+```r
+# Load packages (needed every session)
+library(tidyverse)
+library(janitor)
+```
+
+If you see no errors, you're good. If you get an error about a package not being found, try the install command again with `dependencies = TRUE`:
+
+```r
+install.packages("tidyverse", dependencies = TRUE)
+```
+
+::: {.callout-warning}
+## Common Windows Issue
+
+If R says it can't install a package because a file is "in use," close all other R/RStudio windows and try again. Windows sometimes locks files that are open in another session.
+:::
+
+### Step 3: Create an RStudio Project
+
+Projects keep your files organized and make file paths work correctly.
+
+1. In RStudio: **File → New Project → New Directory → New Project**
+2. Name it `MC451_Analysis` (no spaces)
+3. Choose a location you can find easily (e.g., your Documents folder)
+4. Click **Create Project**
+
+RStudio will restart in your new project. You'll see the project name in the top-right corner of the window.
+
+### Step 4: Test with the Music Dataset
+
+Download `music_data_raw.csv` from Blackboard (or copy it from this workbook's `data/` folder). Place it in your `MC451_Analysis` project folder.
+
+Now load it:
+
+```{r}
+#| label: test-load
+#| eval: false
+
+# Load the packages
+library(tidyverse)
+library(janitor)
+
+# Import the music dataset
+music <- read_csv("data/music_data_raw.csv")
+
+# Check that it loaded — you should see 1,792 rows and 36 columns
+glimpse(music)
+```
+
+If you see a table of data in the Console and `music` appears in your Environment pane (top-right), everything is working.
+
+### Step 5: Verify the `coursepackR` Package (Optional)
+
+Your professor has created a course-specific R package with setup tools and diagnostics:
+
+```r
+# Install coursepackR from GitHub
+install.packages("remotes")
+remotes::install_github("SIM-Lab-SIUE/coursepackR")
+
+# Run the diagnostic check
+library(coursepackR)
+mccourse_check()
+```
+
+This will verify your entire environment — R, RStudio, Quarto, Git, and all required packages. Fix any issues it flags.
+
+## Quarto Documents (.qmd)
+
+All of your R assignments are written in **Quarto documents** — files ending in `.qmd`. A Quarto document mixes text and code in a single file. When you "render" it, Quarto runs your R code, captures the output (tables, charts, numbers), and produces a polished PDF or HTML document.
+
+### The Structure of a .qmd File
+
+A Quarto document has three parts:
+
+**1. YAML Header** (at the very top, between `---` marks):
+```yaml
+---
+title: "My Analysis"
+author: "Your Name"
+format: pdf
+---
+```
+
+**2. Text** (written in plain language, just like any document):
+```
+This analysis examines the relationship between genre
+and musical mode in the Billboard music dataset.
+```
+
+**3. Code Chunks** (R code between special markers):
+
+````
+```{{r}}
+# This is a code chunk — R runs everything in here
+library(tidyverse)
+music <- read_csv("data/music_data_raw.csv")
+```
+````
+
+When you click the **Render** button (or press Ctrl+Shift+K), Quarto:
+
+1. Runs all the R code chunks in order
+2. Captures their output (tables, charts, printed results)
+3. Combines the text and output into a finished document
+4. Saves it as PDF or HTML (whichever you specified)
+
+This is exactly how your final portfolio will work — one Quarto project that renders into both a PDF and a website.
+
+## Try It Yourself
+
+1. Create a new Quarto document in your project: **File → New File → Quarto Document**
+2. Give it a title like "My First Quarto Doc"
+3. In the first code chunk, type:
+
+```r
+library(tidyverse)
+music <- read_csv("data/music_data_raw.csv")
+nrow(music)
+```
+
+4. Click **Render** (or Ctrl+Shift+K)
+5. You should see a PDF (or HTML) with the number `1792` — the number of songs in the dataset
+
+If this works, you're ready for Chapter 4.
+
+::: {.callout-tip}
+## Connection to Your Project
+
+Every assignment from here forward is a `.qmd` file. Your final portfolio is a Quarto *book* — a collection of `.qmd` files that render together. The skills you're building now (writing text + code in the same document) are the exact skills you'll use to publish your research.
+:::

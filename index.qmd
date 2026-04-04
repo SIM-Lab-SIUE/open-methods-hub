@@ -3,20 +3,12 @@ title: "Home"
 ---
 
 ::: hero-section
-# MC Research Methods: Open Methods Hub
+# Open Methods Hub
 
-**Bridging Data Science and Creative Communication**
+**Design, execute, and communicate original research in mass media.**
 
-Learn to design, execute, and communicate original research in mass media.
+Your central hub for MC 451 and MC 501 --- textbook, workbook, tools, and resources in one place.
 :::
-
-------------------------------------------------------------------------
-
-## Welcome to the Course
-
-MC 451 teaches you to think like a researcher: ask precise questions, design rigorous studies, and present your findings as both a professional report and a live website. Over five phases, you'll build a complete content analysis from scratch — qualitative immersion through quantitative testing — using real media data.
-
-**Reference Textbook:** [From Vibes to Variables (2nd Edition)](https://sim-lab-siue.github.io/vibes-to-variables/)
 
 ------------------------------------------------------------------------
 
@@ -24,23 +16,35 @@ MC 451 teaches you to think like a researcher: ask precise questions, design rig
 
 ::::: card-grid
 ::: card
-[Setup]{.card-icon}
-
 ### New Student? Start Here
 
-Complete your workspace setup and download your Methods Vault (15 minutes).
+Complete your workspace setup and download your Methods Vault.
 
-[Get Started](setup.qmd){.btn .btn-primary .btn-lg}
+[Get Started](setup.qmd){.btn .btn-primary}
 :::
 
 ::: card
-[Syllabus]{.card-icon}
+### R Workbook
 
+Seven chapters with narrated video walkthroughs --- from codebook to published portfolio.
+
+[Open Workbook](workbook/index.qmd){.btn .btn-primary}
+:::
+
+::: card
+### Methods Vault
+
+Download your Obsidian workspace --- journals, project folders, and offline textbook chapters.
+
+[Get the Vault](methods-vault.qmd){.btn .btn-secondary}
+:::
+
+::: card
 ### View Syllabus
 
-Review course policies, the 17-week schedule, and grading information.
+Course policies, the 17-week schedule, and grading for MC 451 or MC 501.
 
-[Read Syllabus](syllabus.qmd){.btn .btn-secondary}
+[MC 451](syllabus.qmd){.btn .btn-secondary}
 :::
 :::::
 
@@ -48,27 +52,46 @@ Review course policies, the 17-week schedule, and grading information.
 
 ## The Five Phases
 
+Over one semester, you build a complete content analysis from scratch --- qualitative immersion through quantitative testing --- using real media data.
+
 | Phase | Title | Weeks | Points | Focus |
 |-------|-------|-------|--------|-------|
-| **I** | **The Journalist** | 1–4 | 150 | Reading journals, critical thinking, GitHub setup |
-| **II** | **The Architect** | 2–4 | 125 | Software setup, archive research, project planning |
-| **III** | **The Builder** | 5–12 | 250 | Ethics, theory, codebook, sampling, pilot testing |
-| **IV** | **The Analyst** | 13–15 | 225 | R programming: wrangling, visualization, inference |
-| **V** | **The Publisher** | 16–17 | 250 | Final web portfolio: PDF + GitHub Pages |
+| **I** | [**The Journalist**](modules/01_journalist/index.qmd) | 1--15 | 150 | Reading journals, critical thinking, GitHub setup |
+| **II** | [**The Architect**](modules/02_architect/index.qmd) | 2--4 | 125 | Software setup, archive research, project planning |
+| **III** | [**The Builder**](modules/03_builder/index.qmd) | 5--12 | 250 | Ethics, theory, codebook, sampling, pilot testing |
+| **IV** | [**The Analyst**](modules/04_analyst/index.qmd) | 13--15 | 225 | R programming: wrangling, visualization, inference |
+| **V** | [**The Publisher**](modules/05_publisher/index.qmd) | 16--17 | 250 | Final web portfolio: PDF + GitHub Pages |
 
-[Start Phase I](modules/01_journalist/index.qmd){.btn .btn-primary}
+------------------------------------------------------------------------
+
+## The Ecosystem
+
+Four tools work together throughout the course. Each serves a distinct role.
+
+| Tool | What It Does | When You Use It |
+|------|-------------|-----------------|
+| [**Methods Vault**](methods-vault.qmd) | Obsidian workspace for journals, notes, and project files | Every week --- your personal research archive |
+| [**R Workbook**](workbook/index.qmd) | Hands-on R tutorials with narrated videos | Phases III--V --- learning R for data analysis |
+| [**coursepackR**](resources/index.qmd) | R package that delivers weekly assignment templates and data | Every week --- `download_week("mc451", N)` in R |
+| [**Textbook**](textbook-preview.qmd) | *From Vibes to Variables* (2nd Edition, 22 chapters) | Every week --- conceptual foundations for each phase |
+
+------------------------------------------------------------------------
+
+## Coming Fall 2026
+
+:::{.callout-info}
+## Textbook Preview Available
+
+The 2nd edition of *From Vibes to Variables* is structured into 22 chapters across 5 parts --- from foundations through publication. [Preview the chapter listing and structure.](textbook-preview.qmd)
+:::
 
 ------------------------------------------------------------------------
 
 ## Course Information
 
 **Instructor:** Dr. Alex P. Leith
-**Meeting Times:** MW 3:00–4:15 PM
-**Office Hours:** MW 10:00–11:30 AM and 1:30–3:00 PM (or by appointment)
+**Meeting Times:** MW 3:00--4:15 PM
+**Office Hours:** MW 10:00--11:30 AM and 1:30--3:00 PM (or by appointment)
 **Office:** Dunham Hall 1017
 
-[View Full Syllabus](syllabus.qmd){.btn .btn-primary}
-
-::: callout-info
-**Ready to dive in?** Start with the [Setup Guide](setup.qmd) — it takes about 15 minutes to configure your workspace and download your Methods Vault.
-:::
+[View Full Syllabus](syllabus.qmd){.btn .btn-primary} [How It Works](how-it-works.qmd){.btn .btn-secondary}

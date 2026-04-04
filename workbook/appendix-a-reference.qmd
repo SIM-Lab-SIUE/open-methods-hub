@@ -1,0 +1,116 @@
+---
+title: "R Quick Reference {.unnumbered}"
+execute:
+  eval: false
+  echo: true
+---
+
+# R Quick Reference {.unnumbered}
+
+Every R function used in this workbook, organized by task. Use this as a lookup table when you're working on assignments.
+
+## Importing Data
+
+| Function | Package | What It Does | Example |
+|----------|---------|-------------|---------|
+| `read_csv()` | tidyverse | Imports a CSV file into R | `df <- read_csv("data.csv")` |
+| `readRDS()` | base R | Loads a saved .RDS file | `df <- readRDS("data.RDS")` |
+| `clean_names()` | janitor | Converts column names to lowercase_with_underscores | `df <- df |> clean_names()` |
+
+## Exploring Data
+
+| Function | Package | What It Does | Example |
+|----------|---------|-------------|---------|
+| `glimpse()` | tidyverse | Shows every column with data type and preview | `glimpse(df)` |
+| `summary()` | base R | Summary statistics for all columns | `summary(df)` |
+| `dim()` | base R | Number of rows and columns | `dim(df)` |
+| `names()` | base R | List column names | `names(df)` |
+| `nrow()` | base R | Count rows | `nrow(df)` |
+| `head()` | base R | Show first 6 rows | `head(df)` |
+
+## Cleaning Data
+
+| Function | Package | What It Does | Example |
+|----------|---------|-------------|---------|
+| `distinct()` | tidyverse | Remove duplicate rows | `df |> distinct()` |
+| `filter()` | tidyverse | Keep rows matching a condition | `df |> filter(age > 18)` |
+| `mutate()` | tidyverse | Create or modify columns | `df |> mutate(new = old * 2)` |
+| `case_when()` | tidyverse | Recode values with if/then logic | `case_when(x == 1 ~ "yes", TRUE ~ "no")` |
+| `str_to_lower()` | tidyverse | Convert text to lowercase | `str_to_lower("POP")` → `"pop"` |
+| `is.na()` | base R | Check for missing values | `filter(!is.na(column))` |
+| `factor()` | base R | Convert column to a categorical factor | `factor(df$genre)` |
+| `levels()` | base R | Show factor levels | `levels(df$genre)` |
+
+## Counting and Summarizing
+
+| Function | Package | What It Does | Example |
+|----------|---------|-------------|---------|
+| `count()` | tidyverse | Count rows by group | `df |> count(genre, sort = TRUE)` |
+| `group_by()` | tidyverse | Group data for per-group calculations | `df |> group_by(genre)` |
+| `summarize()` | tidyverse | Calculate summary statistics per group | `summarize(mean_val = mean(x))` |
+| `ungroup()` | tidyverse | Remove grouping | `df |> ungroup()` |
+| `pivot_wider()` | tidyverse | Reshape long → wide | `pivot_wider(names_from = col, values_from = n)` |
+
+## Visualization (ggplot2)
+
+| Function | What It Does | Example |
+|----------|-------------|---------|
+| `ggplot()` | Initialize a plot | `ggplot(df, aes(x = genre))` |
+| `aes()` | Map variables to visual properties | `aes(x = genre, fill = mode)` |
+| `geom_col()` | Bar chart (from pre-counted data) | `+ geom_col()` |
+| `geom_bar()` | Bar chart (counts from raw data) | `+ geom_bar()` |
+| `geom_boxplot()` | Boxplot | `+ geom_boxplot()` |
+| `geom_text()` | Add text labels to a plot | `+ geom_text(aes(label = n))` |
+| `coord_flip()` | Flip x and y axes (horizontal bars) | `+ coord_flip()` |
+| `fct_reorder()` | Sort factor levels by a variable | `fct_reorder(genre, n)` |
+| `fct_infreq()` | Sort factor levels by frequency | `fct_infreq(genre)` |
+| `scale_fill_brewer()` | Colorblind-friendly color palette | `+ scale_fill_brewer(palette = "Set2")` |
+| `labs()` | Add title, subtitle, axis labels, caption | `+ labs(title = "My Chart")` |
+| `theme_minimal()` | Clean, minimal chart theme | `+ theme_minimal()` |
+
+## Statistical Testing
+
+| Function | Package | What It Does | Example |
+|----------|---------|-------------|---------|
+| `table()` | base R | Build a contingency table | `table(df$var1, df$var2)` |
+| `prop.table()` | base R | Convert counts to proportions | `prop.table(tbl, margin = 1)` |
+| `chisq.test()` | base R | Chi-square test of independence | `chisq.test(tbl)` |
+| `$statistic` | — | Extract χ² value from test result | `result$statistic` |
+| `$parameter` | — | Extract degrees of freedom | `result$parameter` |
+| `$p.value` | — | Extract p-value | `result$p.value` |
+| `$stdres` | — | Extract standardized residuals | `result$stdres` |
+
+## Exporting Data
+
+| Function | What It Does | Example |
+|----------|-------------|---------|
+| `saveRDS()` | Save data as .RDS (preserves factors) | `saveRDS(df, "clean.RDS")` |
+| `write_csv()` | Save data as CSV | `write_csv(df, "output.csv")` |
+
+## Publishing (Quarto)
+
+| Command | What It Does |
+|---------|-------------|
+| `quarto render` | Render all chapters into PDF + HTML |
+| `knitr::kable()` | Format a data frame as a publication-ready table |
+| `@citationkey` | Insert an in-text citation from `references.bib` |
+
+## The Pipe: `|>`
+
+The pipe passes the result from the left to the first argument of the function on the right:
+
+```r
+# Without pipe
+clean_names(read_csv("data.csv"))
+
+# With pipe (same thing, easier to read)
+read_csv("data.csv") |> clean_names()
+
+# Chaining multiple steps
+music |>
+  filter(!is.na(mode)) |>
+  count(genre, sort = TRUE) |>
+  mutate(pct = n / sum(n) * 100)
+```
+
+Read `|>` as **"and then."**

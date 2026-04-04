@@ -1,0 +1,301 @@
+---
+title: "Describing Data: Tables and Visualizations"
+execute:
+  eval: false
+  echo: true
+---
+
+# Describing Data: Tables and Visualizations
+
+{{< video videos/05-describing-data.mp4 >}}
+
+You have clean data. Now you need to describe it — what's in the dataset? What patterns are visible? This chapter teaches you to build frequency tables and publication-ready charts using the same music dataset.
+
+Describing data is not just a technical step — it's **communication**. Every table and chart in this chapter answers a question that a reader would have about your data.
+
+## Load Your Clean Data
+
+```{r}
+#| label: load-data
+
+library(tidyverse)
+
+# Load the cleaned dataset from Chapter 4
+music <- readRDS("data/music_data_clean.RDS")
+```
+
+## Frequency Tables
+
+A frequency table answers the simplest question: **How many of each category do I have?**
+
+### One-Variable Frequency Table
+
+```{r}
+#| label: genre-frequency
+
+# Count songs by genre
+genre_counts <- music |>
+  count(playlist_genre, sort = TRUE) |>   # count and sort by frequency
+  mutate(
+    percent = n / sum(n) * 100,           # add percentage column
+    percent = round(percent, 1)           # round to one decimal
+  )
+
+genre_counts
+```
+
+This tells you the distribution of genres in the dataset. Notice that some genres have far more songs than others — that's important context for any analysis.
+
+### Two-Variable Cross-Tabulation
+
+A cross-tabulation shows how two categorical variables relate to each other. This is the foundation for the chi-square test in Chapter 6.
+
+```{r}
+#| label: cross-tab
+
+# Cross-tabulation: genre × mode
+cross_tab <- music |>
+  filter(!is.na(mode_label)) |>           # remove rows where mode is missing
+  count(playlist_genre, mode_label) |>    # count each combination
+  pivot_wider(                            # reshape from long to wide format
+    names_from = mode_label,
+    values_from = n,
+    values_fill = 0                       # fill missing combinations with 0
+  )
+
+cross_tab
+```
+
+::: {.callout-note}
+## What Does `pivot_wider()` Do?
+
+`pivot_wider()` reshapes your data from "long" format (one row per combination) to "wide" format (one row per genre, with columns for each mode). This makes the table easier to read — it looks like the cross-tabulations you've seen in textbooks.
+:::
+
+### Adding Proportions
+
+Raw counts are useful, but proportions tell a richer story:
+
+```{r}
+#| label: cross-tab-proportions
+
+# Cross-tabulation with proportions (within each genre)
+music |>
+  filter(!is.na(mode_label)) |>
+  count(playlist_genre, mode_label) |>
+  group_by(playlist_genre) |>
+  mutate(
+    prop = n / sum(n),                    # proportion within each genre
+    prop = round(prop, 3)                 # round to 3 decimals
+  ) |>
+  ungroup()
+```
+
+Now you can see not just *how many* songs in each genre are major vs. minor, but *what percentage*. If pop is 70% major and edm is 55% major, that's a meaningful difference — even if pop has more total songs.
+
+## The Grammar of Graphics (ggplot2)
+
+R's `ggplot2` package builds charts in layers. Instead of clicking through menus like in Excel, you describe what you want:
+
+```
+ggplot(data, aes(x = ..., y = ..., fill = ...)) +
+  geom_*() +
+  labs() +
+  theme()
+```
+
+Each piece:
+
+| Component | What It Does | Example |
+|-----------|-------------|---------|
+| `ggplot()` | Sets up the canvas and data | `ggplot(music, aes(x = playlist_genre))` |
+| `aes()` | Maps variables to visual properties | `aes(x = genre, fill = mode)` |
+| `geom_*()` | Adds the visual layer (bars, points, etc.) | `geom_col()`, `geom_boxplot()` |
+| `labs()` | Adds titles and labels | `labs(title = "Genre Distribution")` |
+| `theme()` | Controls appearance | `theme_minimal()` |
+
+Think of it like building a sandwich: you start with the bread (the canvas), add the main ingredient (the geometry), then add toppings (labels, colors, themes).
+
+## Bar Chart: Genre Distribution
+
+Let's build a chart in stages — from basic to publication-ready.
+
+### Stage 1: The Bare Minimum
+
+```{r}
+#| label: bar-basic
+
+# The simplest possible bar chart
+ggplot(genre_counts, aes(x = playlist_genre, y = n)) +
+  geom_col()
+```
+
+This works, but it's ugly and hard to read. Let's improve it step by step.
+
+### Stage 2: Sort the Bars
+
+Unsorted bars make it harder to compare. Use `fct_reorder()` to sort by frequency:
+
+```{r}
+#| label: bar-sorted
+
+ggplot(genre_counts, aes(x = fct_reorder(playlist_genre, n), y = n)) +
+  geom_col() +
+  coord_flip()  # horizontal bars are easier to read for category labels
+```
+
+### Stage 3: Add Color and Labels
+
+```{r}
+#| label: bar-colored
+
+ggplot(genre_counts, aes(x = fct_reorder(playlist_genre, n), y = n, fill = playlist_genre)) +
+  geom_col(show.legend = FALSE) +           # hide legend (redundant with axis)
+  coord_flip() +
+  scale_fill_brewer(palette = "Set2") +      # colorblind-friendly palette
+  labs(
+    title = "Distribution of Songs by Genre",
+    subtitle = "Billboard/Spotify Music Dataset (n = 1,792)",
+    x = NULL,                                # remove redundant axis label
+    y = "Number of Songs"
+  ) +
+  theme_minimal(base_size = 12)
+```
+
+### Stage 4: Publication-Ready
+
+```{r}
+#| label: bar-final
+#| fig-width: 8
+#| fig-height: 5
+
+ggplot(genre_counts, aes(x = fct_reorder(playlist_genre, n), y = n, fill = playlist_genre)) +
+  geom_col(show.legend = FALSE, width = 0.7) +
+  geom_text(aes(label = paste0(n, " (", percent, "%)")),  # add count labels
+            hjust = -0.1, size = 3.5) +
+  coord_flip() +
+  scale_fill_brewer(palette = "Set2") +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +  # room for labels
+  labs(
+    title = "Distribution of Songs by Genre",
+    subtitle = "Billboard/Spotify Music Dataset (n = 1,792)",
+    x = NULL,
+    y = "Number of Songs",
+    caption = "Source: Spotify API via coursepackR"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = "bold"),
+    panel.grid.major.y = element_blank()     # remove horizontal grid lines
+  )
+```
+
+That's the difference between a homework chart and a professional one. Every element serves a purpose: the sort order aids comparison, the labels provide exact values, and the clean theme reduces visual noise.
+
+## Stacked Proportional Bar Chart
+
+A stacked proportional chart shows how the composition of one variable changes across categories of another. This is perfect for showing genre × mode relationships:
+
+```{r}
+#| label: stacked-chart
+#| fig-width: 8
+#| fig-height: 5
+
+music |>
+  filter(!is.na(mode_label)) |>
+  ggplot(aes(x = fct_infreq(playlist_genre), fill = mode_label)) +
+  geom_bar(position = "fill") +               # "fill" makes it proportional
+  coord_flip() +
+  scale_fill_brewer(palette = "Set1") +
+  scale_y_continuous(labels = scales::percent) +  # show as percentages
+  labs(
+    title = "Proportion of Major vs. Minor Mode by Genre",
+    subtitle = "Billboard/Spotify Music Dataset",
+    x = NULL,
+    y = "Proportion",
+    fill = "Mode",
+    caption = "Source: Spotify API via coursepackR"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(plot.title = element_text(face = "bold"))
+```
+
+::: {.callout-note}
+## When to Use a Stacked Proportional Chart
+
+Use this chart when you want to compare the *composition* (not the count) across groups. It answers: "Does the proportion of major vs. minor mode differ across genres?" If all bars look roughly the same, there's probably no relationship. If they differ visibly, that's worth testing statistically (Chapter 6).
+:::
+
+## Boxplot: Comparing a Numeric Variable Across Groups
+
+Boxplots show the distribution of a continuous variable across categories. They reveal medians, spread, and outliers at a glance.
+
+```{r}
+#| label: boxplot
+#| fig-width: 8
+#| fig-height: 5
+
+music |>
+  ggplot(aes(x = fct_reorder(playlist_genre, energy, .fun = median),
+             y = energy,
+             fill = playlist_genre)) +
+  geom_boxplot(show.legend = FALSE, alpha = 0.7) +
+  coord_flip() +
+  scale_fill_brewer(palette = "Set2") +
+  labs(
+    title = "Energy Levels by Genre",
+    subtitle = "Higher values indicate more energetic tracks",
+    x = NULL,
+    y = "Energy (0–1 scale)",
+    caption = "Source: Spotify API via coursepackR"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(plot.title = element_text(face = "bold"))
+```
+
+**Reading a boxplot:**
+
+- The **thick line** in the middle is the median (50th percentile)
+- The **box** spans the 25th to 75th percentile (the middle 50% of values)
+- The **whiskers** extend to 1.5× the box width; anything beyond is an **outlier** (shown as dots)
+
+## Writing Your Interpretation
+
+Numbers and charts don't speak for themselves. Your assignment requires a 2–3 paragraph interpretation that cites specific numbers. Here's how to structure it:
+
+**Paragraph 1: What the data contains**
+> "The dataset includes 1,792 songs spanning six genres. Pop and rap are the most represented genres, accounting for X% and Y% of the dataset respectively, while latin represents the smallest share at Z%."
+
+**Paragraph 2: Key patterns**
+> "The cross-tabulation reveals notable differences in musical mode across genres. Pop songs are predominantly in major mode (X%), while [genre] shows a more even split (Y% major, Z% minor). This suggests that genre conventions may influence compositional choices around modality."
+
+**Paragraph 3: Implications**
+> "These descriptive patterns warrant further investigation. The apparent relationship between genre and mode will be tested statistically in the inferencing phase using a chi-square test of independence."
+
+::: {.callout-important}
+## Always Cite Specific Numbers
+
+"Most pop songs are in major mode" is weak. "72.3% of pop songs are in major mode, compared to 56.1% of edm tracks" is strong. Specific numbers make your writing credible and verifiable.
+:::
+
+## Try It Yourself
+
+These exercises map directly to the Describing Data [R] assignment:
+
+1. **Build a frequency table** for `playlist_genre` with both counts and percentages. Format it so a reader can immediately see which genre is most and least common.
+
+2. **Create a cross-tabulation** of `playlist_genre` × `mode_label` with both counts and proportions.
+
+3. **Build a horizontal bar chart** that is publication-ready: sorted bars, colorblind-friendly palette, count labels, full titles and captions.
+
+4. **Create a stacked proportional chart** showing the proportion of major vs. minor mode within each genre.
+
+5. **Choose one additional visualization** (boxplot, scatter plot, or another chart type) and write 2–3 sentences justifying why you chose it and what it reveals.
+
+6. **Write your interpretation:** 2–3 paragraphs that cite specific numbers from your tables and describe the patterns you see.
+
+::: {.callout-tip}
+## Connection to Your Project
+
+For your final portfolio, you'll create a frequency table and bar chart using your own variables — not genre and mode, but whatever you coded in your content analysis. The `ggplot2` syntax is identical. Only the variable names change. The interpretation paragraphs become part of your Results section.
+:::

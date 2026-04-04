@@ -1,0 +1,295 @@
+---
+title: "Data Wrangling: Import, Diagnose, Clean, Export"
+execute:
+  eval: false
+  echo: true
+---
+
+# Data Wrangling: Import, Diagnose, Clean, Export
+
+{{< video videos/04-data-wrangling.mp4 >}}
+
+Real data is messy. The music dataset you're about to work with has missing values, duplicate rows, inconsistent labels, and out-of-range numbers — on purpose. This chapter teaches you how to find and fix these problems using R.
+
+This is the single most practical R skill you'll learn: every dataset needs cleaning before analysis, and the cleaning process is the same regardless of the topic.
+
+## The Four-Step Wrangling Pipeline
+
+```
+Import → Diagnose → Clean → Export
+```
+
+Every data wrangling task follows this sequence. By the end of this chapter, you'll have taken a messy CSV file and produced a clean `.RDS` file ready for visualization and statistical testing.
+
+## Step 1: Import
+
+First, load your packages and import the data:
+
+```{r}
+#| label: import
+
+# Load the packages we need
+library(tidyverse)  # for data manipulation and visualization
+library(janitor)    # for clean_names() — fixes messy column headers
+
+# Import the raw music dataset
+music_raw <- read_csv("data/music_data_raw.csv")
+
+# clean_names() converts column headers to lowercase with underscores
+# "First Week on Board" becomes "first_week_on_board"
+music_raw <- music_raw |> clean_names()
+```
+
+Let's see what we're working with:
+
+```{r}
+#| label: first-look
+
+# How many rows and columns?
+dim(music_raw)
+```
+
+```{r}
+#| label: column-names
+
+# What are the column names?
+names(music_raw)
+```
+
+::: {.callout-note}
+## What Is the `|>` Symbol?
+
+The `|>` is called a **pipe**. It takes the result from the left side and passes it to the function on the right side. Read it as "and then." So `music_raw |> clean_names()` means "take music_raw **and then** clean the names."
+
+You'll also see `%>%` in some tutorials — it does the same thing. We use `|>` because it's built into modern R.
+:::
+
+## Step 2: Diagnose
+
+Before cleaning, you need to know what's wrong. Think of this as a doctor's exam — you check vital signs before prescribing treatment.
+
+### Check the Structure
+
+```{r}
+#| label: glimpse
+
+# glimpse() shows every column with its data type and first few values
+glimpse(music_raw)
+```
+
+Look at the data types:
+- `<chr>` = text (character)
+- `<dbl>` = number (double/decimal)
+- `<date>` = date
+
+### Check for Missing Values
+
+```{r}
+#| label: missing-values
+
+# Count missing values in each column
+# Only show columns that have at least one missing value
+music_raw |>
+  summarize(across(everything(), ~sum(is.na(.)))) |>
+  pivot_longer(everything(), names_to = "column", values_to = "missing") |>
+  filter(missing > 0) |>
+  arrange(desc(missing))
+```
+
+This tells you which columns have missing data and how much. A few missing values are normal. Columns with *most* values missing might need to be dropped entirely.
+
+### Check for Duplicates
+
+```{r}
+#| label: duplicates
+
+# How many rows total vs. how many unique rows?
+cat("Total rows:", nrow(music_raw), "\n")
+cat("Unique rows:", nrow(distinct(music_raw)), "\n")
+cat("Duplicates:", nrow(music_raw) - nrow(distinct(music_raw)), "\n")
+```
+
+### Check Categorical Variables
+
+For text/categorical columns, check the unique values. Inconsistent labels are one of the most common data problems.
+
+```{r}
+#| label: check-genre
+
+# What values does playlist_genre contain?
+music_raw |> count(playlist_genre, sort = TRUE)
+```
+
+```{r}
+#| label: check-mode
+
+# What values does mode contain?
+music_raw |> count(mode, sort = TRUE)
+```
+
+### Check Numeric Variables
+
+```{r}
+#| label: numeric-summary
+
+# Summary statistics for key numeric columns
+music_raw |>
+  select(danceability, energy, valence, tempo, track_popularity) |>
+  summary()
+```
+
+Look for values that don't make sense:
+- `danceability`, `energy`, and `valence` should be between 0 and 1
+- `tempo` should be a positive number (usually 50–250 BPM)
+- `track_popularity` should be between 0 and 100
+
+## Step 3: Clean
+
+Now fix the problems you found. The order matters — handle duplicates first, then labels, then values.
+
+### 3a: Remove Duplicates
+
+```{r}
+#| label: remove-duplicates
+
+# Remove exact duplicate rows
+music_clean <- music_raw |> distinct()
+
+cat("Rows before:", nrow(music_raw), "\n")
+cat("Rows after:", nrow(music_clean), "\n")
+```
+
+### 3b: Standardize Text Labels
+
+If your genre column has inconsistent capitalization or spelling (e.g., "Pop" and "pop" and "POP"), fix it:
+
+```{r}
+#| label: standardize-labels
+
+# Standardize genre labels to lowercase
+music_clean <- music_clean |>
+  mutate(playlist_genre = str_to_lower(playlist_genre))
+
+# Verify: all labels should now be consistent
+music_clean |> count(playlist_genre, sort = TRUE)
+```
+
+### 3c: Handle Problematic Values
+
+Use `case_when()` to recode or fix specific values. This function works like a series of if/then rules:
+
+```{r}
+#| label: fix-values
+
+# Create a labeled version of mode (0/1 → "minor"/"major")
+music_clean <- music_clean |>
+  mutate(
+    mode_label = case_when(
+      mode == 0 ~ "minor",
+      mode == 1 ~ "major",
+      TRUE ~ NA_character_  # anything else becomes NA
+    )
+  )
+
+# Verify
+music_clean |> count(mode_label)
+```
+
+::: {.callout-note}
+## How `case_when()` Works
+
+`case_when()` checks conditions from top to bottom. The first condition that's TRUE determines the result. The `TRUE ~` at the end is a catch-all — it handles anything that didn't match the earlier rules. Think of it as "if none of the above, then..."
+:::
+
+### 3d: Convert to Factors
+
+A **factor** is R's way of storing a categorical variable — it remembers both the values and their labels. This matters for visualization and statistical tests.
+
+```{r}
+#| label: set-factors
+
+# Convert categorical columns to factors
+music_clean <- music_clean |>
+  mutate(
+    playlist_genre = factor(playlist_genre),
+    mode_label = factor(mode_label)
+  )
+
+# Check the factor levels
+levels(music_clean$playlist_genre)
+levels(music_clean$mode_label)
+```
+
+## Step 4: Export
+
+Save your cleaned data as an `.RDS` file. RDS is R's native format — it preserves factor levels, data types, and everything else about your cleaned dataset.
+
+```{r}
+#| label: export
+
+# Save the cleaned dataset
+saveRDS(music_clean, "data/music_data_clean.RDS")
+
+# Verify: read it back and check
+music_verify <- readRDS("data/music_data_clean.RDS")
+cat("Saved successfully:", nrow(music_verify), "rows,", ncol(music_verify), "columns\n")
+```
+
+::: {.callout-important}
+## Why `.RDS` Instead of `.csv`?
+
+When you save as CSV, R forgets which columns are factors and what their levels are. When you save as RDS, everything is preserved. Since you just spent time setting up your factors, you don't want to lose that work. Always save your *cleaned* data as RDS.
+:::
+
+## The Complete Pipeline (Summary)
+
+Here's the entire wrangling process in one code block, without the diagnostic checks:
+
+```{r}
+#| label: complete-pipeline
+#| eval: false
+
+library(tidyverse)
+library(janitor)
+
+# Import
+music_raw <- read_csv("data/music_data_raw.csv") |> clean_names()
+
+# Clean
+music_clean <- music_raw |>
+  distinct() |>                                        # remove duplicates
+  mutate(playlist_genre = str_to_lower(playlist_genre)) |>  # standardize labels
+  mutate(
+    mode_label = case_when(                            # create labeled mode
+      mode == 0 ~ "minor",
+      mode == 1 ~ "major",
+      TRUE ~ NA_character_
+    )
+  ) |>
+  mutate(
+    playlist_genre = factor(playlist_genre),           # set factors
+    mode_label = factor(mode_label)
+  )
+
+# Export
+saveRDS(music_clean, "data/music_data_clean.RDS")
+```
+
+## Try It Yourself
+
+These exercises directly prepare you for the Data Wrangling [R] assignment:
+
+1. **Diagnose another column:** Pick a numeric variable from the dataset (e.g., `energy` or `valence`). Use `summary()` to check its range. Are there any values outside the expected 0–1 range?
+
+2. **Practice `case_when()`:** Create a new variable called `popularity_level` that categorizes `track_popularity` into three groups:
+   - "low" (0–33)
+   - "medium" (34–66)
+   - "high" (67–100)
+
+3. **Run the full pipeline:** Starting from `read_csv()`, apply all four steps to produce a clean `.RDS` file. Verify it loads correctly with `readRDS()`.
+
+::: {.callout-tip}
+## Connection to Your Project
+
+For your own data, you'll follow this exact pipeline — but with your CSV file and your variables. The assignment uses `music_data_raw.csv` as practice. Your final portfolio uses your own coded data. Same skills, different dataset.
+:::
