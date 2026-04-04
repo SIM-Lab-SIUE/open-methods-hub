@@ -5,7 +5,6 @@ execute:
   echo: true
 ---
 
-# From Vibes to Variables: Building Your Quantitative Codebook
 
 {{< video videos/01-codebook.mp4 >}}
 

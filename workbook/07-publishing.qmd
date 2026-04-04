@@ -5,7 +5,6 @@ execute:
   echo: true
 ---
 
-# Publishing Your Research: Quarto Books & GitHub Pages
 
 {{< video videos/07-publishing.mp4 >}}
 

@@ -5,7 +5,6 @@ execute:
   echo: true
 ---
 
-# Inferencing Data: Testing Relationships
 
 {{< video videos/06-inferencing-data.mp4 >}}
 
@@ -45,10 +44,8 @@ The chi-square test evaluates how much the observed data differs from what you'd
 
 library(tidyverse)
 
-# Load clean data
 music <- readRDS("data/music_data_clean.RDS")
 
-# Filter to only rows with valid mode labels
 music_filtered <- music |> filter(!is.na(mode_label))
 ```
 
@@ -56,7 +53,6 @@ A contingency table is the raw input for the chi-square test. It shows the count
 
 ```r
 
-# Build the contingency table using table()
 cont_table <- table(music_filtered$playlist_genre, music_filtered$mode_label)
 cont_table
 ```
@@ -65,7 +61,6 @@ Now add proportions — this helps you see the pattern before running the test:
 
 ```r
 
-# Row proportions (proportion within each genre)
 prop_table <- prop.table(cont_table, margin = 1)  # margin = 1 means row proportions
 round(prop_table, 3)
 ```
@@ -76,7 +71,6 @@ Look at the proportions. Do genres differ in their major/minor split? If every g
 
 ```r
 
-# Run the chi-square test of independence
 chi_result <- chisq.test(cont_table)
 chi_result
 ```
@@ -100,12 +94,10 @@ The p-value is the most important number. Here's what it means in plain terms:
 
 ```r
 
-# Extract the key values
 cat("Chi-square statistic:", round(chi_result$statistic, 2), "\n")
 cat("Degrees of freedom:", chi_result$parameter, "\n")
 cat("p-value:", format.pval(chi_result$p.value, digits = 3), "\n")
 
-# Is it significant at the .05 level?
 if (chi_result$p.value < .05) {
   cat("\nResult: SIGNIFICANT — reject the null hypothesis.\n")
   cat("There is evidence of an association between genre and mode.\n")
@@ -123,7 +115,6 @@ Cramér's V ranges from 0 (no association) to 1 (perfect association):
 
 ```r
 
-# Calculate Cramér's V manually
 chi_sq <- as.numeric(chi_result$statistic)
 n <- sum(cont_table)
 k <- min(nrow(cont_table), ncol(cont_table))  # smaller dimension
@@ -144,7 +135,6 @@ A small effect means the relationship exists but is weak. A large effect means t
 
 ```r
 
-# Interpret the effect size
 cat("Cramér's V =", round(cramers_v, 3), "\n")
 if (cramers_v < .10) {
   cat("Interpretation: Negligible effect\n")
@@ -169,14 +159,12 @@ A standardized residual tells you, for each cell in the table, how much the obse
 
 ```r
 
-# Get standardized residuals
 residuals <- chi_result$stdres
 round(residuals, 2)
 ```
 
 ```r
 
-# Identify cells with residuals > |2|
 residual_df <- as.data.frame(as.table(residuals))
 names(residual_df) <- c("genre", "mode", "residual")
 
@@ -195,7 +183,6 @@ Academic writing uses the American Psychological Association (APA) format for re
 
 ```r
 
-# Generate the APA results sentence automatically
 cat(sprintf(
   "χ²(%d) = %.2f, p %s, Cramér's V = %.3f",
   chi_result$parameter,

@@ -5,7 +5,6 @@ execute:
   echo: true
 ---
 
-# Meet R and RStudio
 
 {{< video videos/03-meet-r.mp4 >}}
 
@@ -67,7 +66,6 @@ You should see something like `"R version 4.4.2 (2024-10-31)"`. The exact versio
 Packages are collections of functions that extend what R can do. You need two:
 
 ```r
-# Install packages (only needed once)
 install.packages("tidyverse")
 install.packages("janitor")
 ```
@@ -75,7 +73,6 @@ install.packages("janitor")
 This may take a few minutes. You'll see red text scrolling — that's normal. When it's done, load them:
 
 ```r
-# Load packages (needed every session)
 library(tidyverse)
 library(janitor)
 ```
@@ -111,14 +108,11 @@ Now load it:
 
 ```r
 
-# Load the packages
 library(tidyverse)
 library(janitor)
 
-# Import the music dataset
 music <- read_csv("data/music_data_raw.csv")
 
-# Check that it loaded — you should see 1,792 rows and 36 columns
 glimpse(music)
 ```
 
@@ -129,11 +123,9 @@ If you see a table of data in the Console and `music` appears in your Environmen
 Your professor has created a course-specific R package with setup tools and diagnostics:
 
 ```r
-# Install coursepackR from GitHub
 install.packages("remotes")
 remotes::install_github("SIM-Lab-SIUE/coursepackR")
 
-# Run the diagnostic check
 library(coursepackR)
 mccourse_check()
 ```
@@ -167,7 +159,6 @@ and musical mode in the Billboard music dataset.
 
 ````
 ```{{r}}
-# This is a code chunk — R runs everything in here
 library(tidyverse)
 music <- read_csv("data/music_data_raw.csv")
 ```

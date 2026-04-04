@@ -5,7 +5,6 @@ execute:
   echo: true
 ---
 
-# Data Wrangling: Import, Diagnose, Clean, Export
 
 {{< video videos/04-data-wrangling.mp4 >}}
 
@@ -27,15 +26,11 @@ First, load your packages and import the data:
 
 ```r
 
-# Load the packages we need
 library(tidyverse)  # for data manipulation and visualization
 library(janitor)    # for clean_names() — fixes messy column headers
 
-# Import the raw music dataset
 music_raw <- read_csv("data/music_data_raw.csv")
 
-# clean_names() converts column headers to lowercase with underscores
-# "First Week on Board" becomes "first_week_on_board"
 music_raw <- music_raw |> clean_names()
 ```
 
@@ -43,13 +38,11 @@ Let's see what we're working with:
 
 ```r
 
-# How many rows and columns?
 dim(music_raw)
 ```
 
 ```r
 
-# What are the column names?
 names(music_raw)
 ```
 
@@ -69,7 +62,6 @@ Before cleaning, you need to know what's wrong. Think of this as a doctor's exam
 
 ```r
 
-# glimpse() shows every column with its data type and first few values
 glimpse(music_raw)
 ```
 
@@ -82,8 +74,6 @@ Look at the data types:
 
 ```r
 
-# Count missing values in each column
-# Only show columns that have at least one missing value
 music_raw |>
   summarize(across(everything(), ~sum(is.na(.)))) |>
   pivot_longer(everything(), names_to = "column", values_to = "missing") |>
@@ -97,7 +87,6 @@ This tells you which columns have missing data and how much. A few missing value
 
 ```r
 
-# How many rows total vs. how many unique rows?
 cat("Total rows:", nrow(music_raw), "\n")
 cat("Unique rows:", nrow(distinct(music_raw)), "\n")
 cat("Duplicates:", nrow(music_raw) - nrow(distinct(music_raw)), "\n")
@@ -109,13 +98,11 @@ For text/categorical columns, check the unique values. Inconsistent labels are o
 
 ```r
 
-# What values does playlist_genre contain?
 music_raw |> count(playlist_genre, sort = TRUE)
 ```
 
 ```r
 
-# What values does mode contain?
 music_raw |> count(mode, sort = TRUE)
 ```
 
@@ -123,7 +110,6 @@ music_raw |> count(mode, sort = TRUE)
 
 ```r
 
-# Summary statistics for key numeric columns
 music_raw |>
   select(danceability, energy, valence, tempo, track_popularity) |>
   summary()
@@ -142,7 +128,6 @@ Now fix the problems you found. The order matters — handle duplicates first, t
 
 ```r
 
-# Remove exact duplicate rows
 music_clean <- music_raw |> distinct()
 
 cat("Rows before:", nrow(music_raw), "\n")
@@ -155,11 +140,9 @@ If your genre column has inconsistent capitalization or spelling (e.g., "Pop" an
 
 ```r
 
-# Standardize genre labels to lowercase
 music_clean <- music_clean |>
   mutate(playlist_genre = str_to_lower(playlist_genre))
 
-# Verify: all labels should now be consistent
 music_clean |> count(playlist_genre, sort = TRUE)
 ```
 
@@ -169,7 +152,6 @@ Use `case_when()` to recode or fix specific values. This function works like a s
 
 ```r
 
-# Create a labeled version of mode (0/1 → "minor"/"major")
 music_clean <- music_clean |>
   mutate(
     mode_label = case_when(
@@ -179,7 +161,6 @@ music_clean <- music_clean |>
     )
   )
 
-# Verify
 music_clean |> count(mode_label)
 ```
 
@@ -195,14 +176,12 @@ A **factor** is R's way of storing a categorical variable — it remembers both 
 
 ```r
 
-# Convert categorical columns to factors
 music_clean <- music_clean |>
   mutate(
     playlist_genre = factor(playlist_genre),
     mode_label = factor(mode_label)
   )
 
-# Check the factor levels
 levels(music_clean$playlist_genre)
 levels(music_clean$mode_label)
 ```
@@ -213,10 +192,8 @@ Save your cleaned data as an `.RDS` file. RDS is R's native format — it preser
 
 ```r
 
-# Save the cleaned dataset
 saveRDS(music_clean, "data/music_data_clean.RDS")
 
-# Verify: read it back and check
 music_verify <- readRDS("data/music_data_clean.RDS")
 cat("Saved successfully:", nrow(music_verify), "rows,", ncol(music_verify), "columns\n")
 ```
@@ -236,10 +213,8 @@ Here's the entire wrangling process in one code block, without the diagnostic ch
 library(tidyverse)
 library(janitor)
 
-# Import
 music_raw <- read_csv("data/music_data_raw.csv") |> clean_names()
 
-# Clean
 music_clean <- music_raw |>
   distinct() |>                                        # remove duplicates
   mutate(playlist_genre = str_to_lower(playlist_genre)) |>  # standardize labels
@@ -255,7 +230,6 @@ music_clean <- music_raw |>
     mode_label = factor(mode_label)
   )
 
-# Export
 saveRDS(music_clean, "data/music_data_clean.RDS")
 ```
 

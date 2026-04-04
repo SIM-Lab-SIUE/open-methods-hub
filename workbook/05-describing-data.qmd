@@ -5,7 +5,6 @@ execute:
   echo: true
 ---
 
-# Describing Data: Tables and Visualizations
 
 {{< video videos/05-describing-data.mp4 >}}
 
@@ -19,7 +18,6 @@ Describing data is not just a technical step — it's **communication**. Every t
 
 library(tidyverse)
 
-# Load the cleaned dataset from Chapter 4
 music <- readRDS("data/music_data_clean.RDS")
 ```
 
@@ -31,7 +29,6 @@ A frequency table answers the simplest question: **How many of each category do 
 
 ```r
 
-# Count songs by genre
 genre_counts <- music |>
   count(playlist_genre, sort = TRUE) |>   # count and sort by frequency
   mutate(
@@ -50,7 +47,6 @@ A cross-tabulation shows how two categorical variables relate to each other. Thi
 
 ```r
 
-# Cross-tabulation: genre × mode
 cross_tab <- music |>
   filter(!is.na(mode_label)) |>           # remove rows where mode is missing
   count(playlist_genre, mode_label) |>    # count each combination
@@ -75,7 +71,6 @@ Raw counts are useful, but proportions tell a richer story:
 
 ```r
 
-# Cross-tabulation with proportions (within each genre)
 music |>
   filter(!is.na(mode_label)) |>
   count(playlist_genre, mode_label) |>
@@ -120,7 +115,6 @@ Let's build a chart in stages — from basic to publication-ready.
 
 ```r
 
-# The simplest possible bar chart
 ggplot(genre_counts, aes(x = playlist_genre, y = n)) +
   geom_col()
 ```

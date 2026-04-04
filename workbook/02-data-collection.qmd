@@ -5,7 +5,6 @@ execute:
   echo: true
 ---
 
-# Data Collection: Consistency at Scale
 
 {{< video videos/02-data-collection.mp4 >}}
 

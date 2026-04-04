@@ -5,7 +5,6 @@ execute:
   echo: true
 ---
 
-# R Quick Reference {.unnumbered}
 
 Every R function used in this workbook, organized by task. Use this as a lookup table when you're working on assignments.
 
@@ -100,13 +99,10 @@ Every R function used in this workbook, organized by task. Use this as a lookup 
 The pipe passes the result from the left to the first argument of the function on the right:
 
 ```r
-# Without pipe
 clean_names(read_csv("data.csv"))
 
-# With pipe (same thing, easier to read)
 read_csv("data.csv") |> clean_names()
 
-# Chaining multiple steps
 music |>
   filter(!is.na(mode)) |>
   count(genre, sort = TRUE) |>

@@ -5,7 +5,6 @@ execute:
   echo: true
 ---
 
-# Glossary {.unnumbered}
 
 Key terms from this workbook, defined in plain English.
 
