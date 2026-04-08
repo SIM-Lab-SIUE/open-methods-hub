@@ -8,17 +8,17 @@ execute:
   echo: true
 ---
 
-## Setup
+# Setup
 
 ```{r}
 #| label: setup
 
-# Load your packages here
+# Load your packages
 
 
 ```
 
-## Step 1: Import
+# Step 1: Import
 
 Import the Pokemon dataset from this URL and clean the column names:
 
@@ -44,9 +44,9 @@ How many rows and columns?
 
 > YOUR ANSWER HERE
 
-## Step 2: Diagnose
+# Step 2: Diagnose
 
-### Column names and types
+## Column names and types
 
 ```{r}
 #| label: structure
@@ -58,7 +58,7 @@ How many rows and columns?
 
 > YOUR ANSWER HERE
 
-### Missing values
+## Missing values
 
 ```{r}
 #| label: missing
@@ -70,7 +70,7 @@ How many rows and columns?
 
 > YOUR ANSWER HERE
 
-### Duplicates
+## Duplicates
 
 ```{r}
 #| label: duplicates
@@ -78,7 +78,7 @@ How many rows and columns?
 
 ```
 
-### Categorical variables
+## Categorical variables
 
 ```{r}
 #| label: check-types
@@ -100,7 +100,7 @@ How many rows and columns?
 
 > YOUR ANSWER HERE
 
-### Numeric ranges
+## Numeric ranges
 
 ```{r}
 #| label: numeric-check
@@ -114,9 +114,9 @@ How many rows and columns?
 
 > YOUR ANSWER HERE
 
-## Step 3: Clean
+# Step 3: Clean
 
-### 3a: Remove duplicates
+## 3a: Remove duplicates
 
 ```{r}
 #| label: remove-dupes
@@ -124,9 +124,9 @@ How many rows and columns?
 
 ```
 
-### 3b: Handle missing values
+## 3b: Handle missing values
 
-Replace NA in `type_2` with `"none"`.
+Replace NA in `type_2` with `"none"` and impute missing numerics with the column median.
 
 ```{r}
 #| label: handle-missing
@@ -134,7 +134,7 @@ Replace NA in `type_2` with `"none"`.
 
 ```
 
-### 3c: Create a power tier
+## 3c: Create a power tier
 
 Create `power_tier` from `base_experience`:
 
@@ -156,7 +156,7 @@ Check your work:
 
 ```
 
-### 3d: Create a size class
+## 3d: Create a size class
 
 Create `size_class` from `weight`:
 
@@ -170,9 +170,9 @@ Create `size_class` from `weight`:
 
 ```
 
-### 3e: Convert to factors
+## 3e: Convert to factors
 
-Convert `type_1`, `power_tier`, and `size_class` to factors.
+Convert `type_1`, `type_2`, `power_tier`, `size_class`, and `generation_id` to factors.
 
 ```{r}
 #| label: factors
@@ -186,7 +186,7 @@ Convert `type_1`, `power_tier`, and `size_class` to factors.
 
 ```
 
-## Step 4: Export
+# Step 4: Export
 
 ```{r}
 #| label: export
@@ -200,7 +200,7 @@ Convert `type_1`, `power_tier`, and `size_class` to factors.
 
 ```
 
-## Reflection
+# Reflection
 
 1. **What was different** about doing this yourself versus watching a demo?
 

@@ -7,97 +7,98 @@ execute:
 ---
 
 :::{.callout-tip}
-## Download and Follow Along
+## Download the Practice File
 
-Download the practice file to work through in RStudio:
+Download the `.qmd` to work through in RStudio:
 
 [**pokemon-practice.qmd**](pokemon-practice.qmd){.btn .btn-primary download="pokemon-practice.qmd"}
 
-Open it in RStudio, fill in the code chunks, and render when you're done. This is not graded --- it exists so you can make mistakes here instead of in your assignment.
+The first half of this page walks through the dataset together. The second half is yours to complete independently.
 :::
 
 ---
 
-## What This Practice Covers
+# Part 1: Setting the Stage
 
-You learned the four-step wrangling pipeline in the [Data Wrangling chapter](../../workbook/04-data-wrangling.qmd) using the music dataset. Now you'll do it yourself with a dataset you haven't seen before.
+## Why a New Dataset?
 
-**Same pipeline. Different data. You drive.**
+You learned the four-step wrangling pipeline in the [Data Wrangling chapter](../../workbook/04-data-wrangling.qmd) using the music dataset. That chapter taught you the functions. This practice tests whether you can *apply* them --- to data you haven't seen, with column names you don't recognize, and problems you have to find yourself.
 
-The dataset contains stats, types, and physical attributes for 949 Pokemon across all generations. It comes from the [TidyTuesday](https://github.com/rfordatascience/tidytuesday/tree/main/data/2025/2025-04-01) project --- a weekly community data practice used by R learners and professionals worldwide.
+The pipeline is always the same:
 
----
+```
+Import → Diagnose → Clean → Export
+```
 
-## Quick Reference
+If you can wrangle Pokemon data, you can wrangle your content analysis data. Same skills, different columns.
 
-Before you start, here are the functions you'll need. Try to recall them before looking.
+## The Dataset
 
-| Step | Function | What It Does |
-|------|----------|-------------|
-| Import | `read_csv("url")` | Load a CSV file |
-| Import | `clean_names()` | Fix column names to `lowercase_underscores` |
-| Diagnose | `glimpse(df)` | See all columns, types, and preview values |
-| Diagnose | `colSums(is.na(df))` | Count missing values per column |
-| Diagnose | `distinct(df) |> nrow()` | Count unique rows |
-| Diagnose | `count(df, column)` | See all values in a category |
-| Diagnose | `summary(df$column)` | Min/max/mean for a numeric column |
-| Clean | `distinct()` | Remove duplicate rows |
-| Clean | `case_when(cond ~ "label", TRUE ~ "default")` | Create categories |
-| Clean | `factor(x)` | Convert text to categorical factor |
-| Clean | `mutate(new_col = ...)` | Create or modify a column |
-| Export | `saveRDS(df, "file.RDS")` | Save with data types preserved |
+Today's data comes from the [TidyTuesday](https://github.com/rfordatascience/tidytuesday/tree/main/data/2025/2025-04-01) project --- a weekly community data practice used by R learners and professionals worldwide. It contains stats, types, and physical attributes for 949 Pokemon across all generations.
 
----
+This dataset has:
 
-## Step 1: Import
+- **Text columns** (`type_1`, `type_2`, `color_1`, `egg_group_1`) --- for practicing `count()` and `factor()`
+- **Numeric columns** (`hp`, `attack`, `defense`, `speed`, `weight`, `height`) --- for practicing `summary()` and range checks
+- **Real missing values** --- not every Pokemon has a secondary type, so `type_2` and `egg_group_2` have legitimate NAs
+- **Enough rows** (949) to feel like real data without being overwhelming
 
-Load your packages and import the Pokemon dataset from the URL below.
+## Importing Together
+
+Start by loading packages and pulling the data from the URL:
 
 ```r
 library(tidyverse)
 library(janitor)
+
+pokemon_raw <- read_csv(
+  "https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-04-01/pokemon_df.csv"
+)
+
+pokemon <- pokemon_raw |>
+  clean_names()
 ```
 
-```r
-pokemon_raw <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-04-01/pokemon_df.csv")
-pokemon <- pokemon_raw |> clean_names()
-```
+::: {.callout-note}
+## Reading Data from a URL
 
-Check your work:
+`read_csv()` works with URLs, not just local files. R downloads the data directly into memory. This is how many open datasets are shared --- no file download needed.
+:::
+
+Check what we're working with:
 
 ```r
 dim(pokemon)
+names(pokemon)
 ```
 
-:::{.callout-note}
-## Reading Data from a URL
+You should see 949 rows and 22 columns. Each row is one Pokemon.
 
-`read_csv()` works with URLs, not just local files. R downloads the data directly into memory. This is how many open datasets are shared --- you don't need to download a file first.
-:::
+## Diagnosing Together
 
-**Question:** What does each row in this dataset represent? How many rows and columns are there?
+Let's walk through the diagnostic checks as a class.
 
----
-
-## Step 2: Diagnose
-
-### Column names and types
+### Structure
 
 ```r
 glimpse(pokemon)
 ```
 
-You should see a mix of `<chr>` (text), `<int>` (whole numbers), and `<dbl>` (decimal numbers). This dataset has more variety than the music data.
+Notice the mix of types:
 
-**Question:** How many columns are text? How many are numeric?
+- `<chr>` = text (character) --- names, types, colors, egg groups, URLs
+- `<int>` = whole numbers --- stats like hp, attack, defense, speed
+- `<dbl>` = decimal numbers --- height, weight
 
-### Missing values
+### Missing Values
 
 ```r
 colSums(is.na(pokemon))
 ```
 
-**Question:** Which columns have missing values? Think about *why* --- is the missing data an error, or does it mean something? (Hint: not every Pokemon has a secondary type.)
+You'll find missing values in `type_2`, `color_2`, and `egg_group_2`. This is not an error --- not every Pokemon has a secondary type. But you need to decide what to do about it before analysis.
+
+You'll also find NAs in `base_experience`. Some Pokemon simply don't have this stat recorded.
 
 ### Duplicates
 
@@ -106,62 +107,104 @@ cat("Total rows:", nrow(pokemon), "\n")
 cat("Unique rows:", nrow(distinct(pokemon)), "\n")
 ```
 
-### Check categorical variables
-
-```r
-pokemon |> count(type_1, sort = TRUE)
-```
-
-```r
-pokemon |> count(generation_id)
-```
-
-**Question:** How many primary types exist? Which generation has the most Pokemon?
-
-### Check numeric ranges
+### Categories
 
 ```r
 pokemon |>
-  select(hp, attack, defense, speed, weight, height, base_experience) |>
+  count(type_1, sort = TRUE)
+```
+
+18 primary types. Water is the most common. This is a clean categorical variable --- no inconsistent labels, no typos. Not every dataset will be this cooperative.
+
+```r
+pokemon |>
+  count(generation_id)
+```
+
+Generations 1 and 5 have the most Pokemon. This column is numeric, but it represents a category --- a good candidate for `factor()`.
+
+### Numeric Ranges
+
+```r
+pokemon |>
+  select(
+    hp,
+    attack,
+    defense,
+    speed,
+    weight,
+    height,
+    base_experience
+  ) |>
   summary()
 ```
 
-**Question:** Do the ranges make sense? Which stat has the widest spread?
+Check the mins and maxes. Do they make sense? Weight and height have huge ranges because Pokemon range from tiny to enormous. The combat stats (hp, attack, defense, speed) typically run 1--255.
 
 ---
 
-## Step 3: Clean
+## What Needs Cleaning?
 
-### 3a: Remove duplicates
+Here's what we found:
+
+| Issue | Column(s) | Decision |
+|-------|-----------|----------|
+| Missing secondary type | `type_2` | Fill with `"none"` --- absence is meaningful |
+| Missing base experience | `base_experience` | Impute with median |
+| No factor types | `type_1`, `generation_id` | Convert after cleaning |
+| No derived variables | --- | Create `power_tier` and `size_class` with `case_when()` |
+
+This is typical. Not every dataset has dramatic errors. Sometimes cleaning is just structuring the data for the analysis you want to run.
+
+---
+
+# Part 2: Your Turn
+
+Everything below this line is yours. The downloaded `.qmd` file has empty code chunks for each step. Fill them in, render, and verify your output.
+
+---
+
+## Clean the Data
+
+### Remove duplicates
 
 ```r
-pokemon_clean <- pokemon |> distinct()
+pokemon_clean <- pokemon |>
+  distinct()
 ```
 
-Even if there are no duplicates, write the code. It's part of the pipeline.
+Even if there are none, write the code. It's part of the pipeline.
 
-### 3b: Handle missing values
+### Handle missing values
 
-Some Pokemon don't have a secondary type --- that's real, not an error. For practice, fill those NAs with `"none"`:
+Fill missing `type_2` with `"none"` and impute missing numerics with the column median:
 
 ```r
 pokemon_clean <- pokemon_clean |>
-  mutate(type_2 = ifelse(is.na(type_2), "none", type_2))
+  mutate(
+    type_2 = ifelse(is.na(type_2), "none", type_2)
+  ) |>
+  mutate(
+    across(
+      where(is.numeric),
+      ~ ifelse(is.na(.), median(., na.rm = TRUE), .)
+    )
+  )
 ```
 
-:::{.callout-note}
+::: {.callout-note}
 ## When Missing Data Isn't an Error
 
-In the music dataset, missing values usually meant something went wrong during data collection. Here, a missing `type_2` means the Pokemon only has one type. The decision to fill it with `"none"` vs. leave it as `NA` depends on what you plan to do with the data. For practice, we fill it so you can include it in `count()` and `factor()` without issues.
+In the music dataset, missing values usually meant something went wrong during collection. Here, a missing `type_2` means the Pokemon only has one type. The decision to fill it with `"none"` vs. leave it as `NA` depends on your analysis plan. We fill it here so `count()` and `factor()` work cleanly.
 :::
 
-### 3c: Create a power tier with `case_when()`
+### Create a power tier with `case_when()`
 
-Create a new column called `power_tier` based on `base_experience`:
+Create `power_tier` from `base_experience`:
 
-- `"low"` if base_experience is below 100
-- `"mid"` if base_experience is 100 to 199
-- `"high"` if base_experience is 200 or above
+- `"low"` if below 100
+- `"mid"` if 100 to 199
+- `"high"` if 200 or above
 
 ```r
 pokemon_clean <- pokemon_clean |>
@@ -173,27 +216,24 @@ pokemon_clean <- pokemon_clean |>
       TRUE                   ~ NA_character_
     )
   )
+
+pokemon_clean |>
+  count(power_tier)
 ```
 
-Check your work:
-
-```r
-pokemon_clean |> count(power_tier)
-```
-
-:::{.callout-tip}
+::: {.callout-tip}
 ## The `TRUE ~` Catch-All
 
-The `TRUE ~ NA_character_` line handles anything that didn't match the conditions above --- including `NA` values in `base_experience`. Without this line, unmatched rows silently become `NA`, which can be confusing to debug. Always include a catch-all.
+The `TRUE ~ NA_character_` line handles anything that didn't match above --- including any remaining `NA` values. Without it, unmatched rows silently become `NA`, which is confusing to debug. Always include a catch-all.
 :::
 
-### 3d: Create a size class
+### Create a size class
 
-Create a column called `size_class` based on `weight`:
+Create `size_class` from `weight`:
 
-- `"light"` if weight is under 25
-- `"medium"` if weight is 25 to 100
-- `"heavy"` if weight is over 100
+- `"light"` if under 25
+- `"medium"` if 25 to 100
+- `"heavy"` if over 100
 
 ```r
 pokemon_clean <- pokemon_clean |>
@@ -205,16 +245,21 @@ pokemon_clean <- pokemon_clean |>
       TRUE          ~ NA_character_
     )
   )
+
+pokemon_clean |>
+  count(size_class)
 ```
 
-### 3e: Convert to factors
+### Convert to factors
 
 ```r
 pokemon_clean <- pokemon_clean |>
   mutate(
     type_1 = factor(type_1),
+    type_2 = factor(type_2),
     power_tier = factor(power_tier),
-    size_class = factor(size_class)
+    size_class = factor(size_class),
+    generation_id = factor(generation_id)
   )
 
 levels(pokemon_clean$type_1)
@@ -222,20 +267,68 @@ levels(pokemon_clean$power_tier)
 levels(pokemon_clean$size_class)
 ```
 
----
-
-## Step 4: Export
+## Export
 
 ```r
 saveRDS(pokemon_clean, "pokemon_clean.RDS")
+
+pokemon_verify <- readRDS("pokemon_clean.RDS")
+
+cat(
+  "Rows:", nrow(pokemon_verify),
+  "| Columns:", ncol(pokemon_verify), "\n"
+)
+
+levels(pokemon_verify$power_tier)
 ```
 
-Verify:
+## The Complete Pipeline
+
+Here's everything in one block, without the diagnostic checks:
 
 ```r
-pokemon_verify <- readRDS("pokemon_clean.RDS")
-cat("Rows:", nrow(pokemon_verify), "| Columns:", ncol(pokemon_verify), "\n")
-levels(pokemon_verify$power_tier)
+library(tidyverse)
+library(janitor)
+
+pokemon_raw <- read_csv(
+  "https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-04-01/pokemon_df.csv"
+)
+
+pokemon_clean <- pokemon_raw |>
+  clean_names() |>
+  distinct() |>
+  mutate(
+    type_2 = ifelse(is.na(type_2), "none", type_2)
+  ) |>
+  mutate(
+    across(
+      where(is.numeric),
+      ~ ifelse(is.na(.), median(., na.rm = TRUE), .)
+    )
+  ) |>
+  mutate(
+    power_tier = case_when(
+      base_experience < 100  ~ "low",
+      base_experience < 200  ~ "mid",
+      base_experience >= 200 ~ "high",
+      TRUE                   ~ NA_character_
+    ),
+    size_class = case_when(
+      weight < 25   ~ "light",
+      weight <= 100 ~ "medium",
+      weight > 100  ~ "heavy",
+      TRUE          ~ NA_character_
+    )
+  ) |>
+  mutate(
+    type_1 = factor(type_1),
+    type_2 = factor(type_2),
+    power_tier = factor(power_tier),
+    size_class = factor(size_class),
+    generation_id = factor(generation_id)
+  )
+
+saveRDS(pokemon_clean, "pokemon_clean.RDS")
 ```
 
 ---
@@ -251,5 +344,5 @@ levels(pokemon_verify$power_tier)
 :::{.callout-important}
 ## Connection to Your Assignment
 
-The Data Wrangling assignment uses `music_data_raw.csv` and follows this exact pipeline. If you completed this practice, you've already done the hard part --- now apply the same steps to a different dataset. Same functions, same order, different column names.
+The Data Wrangling assignment uses `music_data_raw.csv` and follows this exact pipeline. If you completed this practice, you've already done the hard part --- same functions, same order, different column names.
 :::
