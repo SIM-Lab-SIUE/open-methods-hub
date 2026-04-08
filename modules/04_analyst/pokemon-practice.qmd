@@ -1,0 +1,212 @@
+---
+title: "Practice: Data Wrangling with Pokemon"
+author: "YOUR NAME"
+date: today
+format: html
+---
+
+## Setup
+
+```{r}
+#| label: setup
+
+# Load your packages here
+
+
+```
+
+## Step 1: Import
+
+Import the Pokemon dataset from this URL and clean the column names:
+
+`https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-04-01/pokemon_df.csv`
+
+```{r}
+#| label: import
+
+# Import and clean names
+
+
+```
+
+How many rows and columns?
+
+```{r}
+#| label: dimensions
+
+
+```
+
+**What does each row represent?**
+
+> YOUR ANSWER HERE
+
+## Step 2: Diagnose
+
+### Column names and types
+
+```{r}
+#| label: structure
+
+
+```
+
+**How many columns are text? How many are numbers?**
+
+> YOUR ANSWER HERE
+
+### Missing values
+
+```{r}
+#| label: missing
+
+
+```
+
+**Which columns have missing values? Why might they be missing?**
+
+> YOUR ANSWER HERE
+
+### Duplicates
+
+```{r}
+#| label: duplicates
+
+
+```
+
+### Categorical variables
+
+```{r}
+#| label: check-types
+
+# Count the primary types
+
+
+```
+
+```{r}
+#| label: check-generations
+
+# Count Pokemon per generation
+
+
+```
+
+**How many primary types? Which generation has the most?**
+
+> YOUR ANSWER HERE
+
+### Numeric ranges
+
+```{r}
+#| label: numeric-check
+
+# Check hp, attack, defense, speed, weight, height
+
+
+```
+
+**Do the ranges make sense? Flag anything suspicious.**
+
+> YOUR ANSWER HERE
+
+## Step 3: Clean
+
+### 3a: Remove duplicates
+
+```{r}
+#| label: remove-dupes
+
+
+```
+
+### 3b: Handle missing values
+
+Replace NA in `type_2` with `"none"`.
+
+```{r}
+#| label: handle-missing
+
+
+```
+
+### 3c: Create a power tier
+
+Create `power_tier` from `base_experience`:
+
+- `"low"` if below 100
+- `"mid"` if 100 to 199
+- `"high"` if 200 or above
+
+```{r}
+#| label: power-tier
+
+
+```
+
+Check your work:
+
+```{r}
+#| label: check-tiers
+
+
+```
+
+### 3d: Create a size class
+
+Create `size_class` from `weight`:
+
+- `"light"` if under 25
+- `"medium"` if 25 to 100
+- `"heavy"` if over 100
+
+```{r}
+#| label: size-class
+
+
+```
+
+### 3e: Convert to factors
+
+Convert `type_1`, `power_tier`, and `size_class` to factors.
+
+```{r}
+#| label: factors
+
+
+```
+
+```{r}
+#| label: check-levels
+
+
+```
+
+## Step 4: Export
+
+```{r}
+#| label: export
+
+
+```
+
+```{r}
+#| label: verify
+
+
+```
+
+## Reflection
+
+1. **What was different** about doing this yourself versus watching a demo?
+
+> YOUR ANSWER HERE
+
+2. **Which function** gave you the most trouble?
+
+> YOUR ANSWER HERE
+
+3. **What's your plan** for completing the assignment before the deadline?
+
+> YOUR ANSWER HERE

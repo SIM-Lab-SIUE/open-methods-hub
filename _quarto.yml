@@ -31,6 +31,8 @@ website:
             href: modules/03_builder/index.qmd
           - text: "Phase IV: The Analyst"
             href: modules/04_analyst/index.qmd
+          - text: "Practice: Pokemon Wrangling"
+            href: modules/04_analyst/practice-wrangling.qmd
           - text: "Phase V: The Publisher"
             href: modules/05_publisher/index.qmd
       - text: "Workbook"
