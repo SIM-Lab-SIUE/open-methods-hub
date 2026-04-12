@@ -1,0 +1,384 @@
+---
+title: "The Surprise Detector: Hypothesis Testing, t-Tests, and Correlation"
+subtitle: "Chapter 19"
+execute:
+  eval: false
+  echo: true
+---
+
+You have described the data and seen patterns. Now the real question: **are those patterns real, or could they be random noise?**
+
+This chapter introduces the logic of hypothesis testing and walks you through three inferential tests --- chi-square, the independent-samples t-test, and Pearson correlation. The chi-square test was covered in detail in the [R Workbook Ch 6](../workbook/06-inferencing-data.qmd); this chapter adds the t-test and correlation that [Assignment 03: Inferencing Data](https://sim-lab-siue.github.io/vibes-to-variables/chapters/chapter19.html) requires.
+
+---
+
+## The Logic of Hypothesis Testing
+
+Statistical inference works like a courtroom trial. The defendant is **innocent until proven guilty** --- and in research, the null hypothesis is **true until the data overwhelms it**.
+
+### The Framework
+
+1. **State two hypotheses** before looking at any output.
+   - **H₀ (null):** There is no effect / no relationship / no difference. Whatever pattern you see is due to chance.
+   - **H₁ (alternative):** There is an effect / relationship / difference. The pattern is real.
+
+2. **Collect data and compute a test statistic.** The statistic measures how far the observed data deviates from what you would expect if H₀ were true.
+
+3. **Calculate the p-value.** This is the probability of seeing data *this extreme or more extreme* if the null hypothesis were true.
+
+4. **Make a decision.** If p < .05, the data is surprising enough to reject H₀. If p >= .05, you do not have enough evidence to reject it.
+
+::: {.callout-important}
+## Hypotheses Come First
+
+Write your hypotheses *before* you run any code. This is not a formality --- it is how researchers avoid unconsciously fitting conclusions to output. The hypothesis drives the analysis, not the other way around.
+:::
+
+### What a p-Value IS and IS NOT
+
+The p-value is the **most misunderstood statistic in science**. Here is what it actually means:
+
+> **p-value:** The probability of observing data this extreme (or more extreme) *if the null hypothesis were true*.
+
+And here is what it does **not** mean:
+
+| Common Misconception | Reality |
+|---------------------|---------|
+| "The probability that H₀ is true" | No. The p-value assumes H₀ is true and asks how surprising the data is. |
+| "The probability that my finding is real" | No. A small p-value means the data is unlikely under H₀, not that H₁ is certainly true. |
+| "The probability of replication" | No. A p-value from one study does not predict whether the next study will replicate. |
+| "A measure of effect size" | No. A tiny, trivial effect can produce p < .001 with a large enough sample. |
+| "p = .049 and p = .051 are fundamentally different" | No. They are nearly identical. The .05 threshold is a convention, not a cliff. |
+
+### Type I and Type II Errors
+
+| | H₀ is actually true | H₀ is actually false |
+|---|---|---|
+| **Reject H₀** | Type I error (false positive) | Correct decision |
+| **Fail to reject H₀** | Correct decision | Type II error (false negative) |
+
+- **Type I error (alpha):** Claiming an effect exists when it does not. Controlled by the significance level (usually .05).
+- **Type II error (beta):** Missing a real effect because the sample was too small or noisy. Related to statistical power ([Chapter 20](20-interpreting-the-call.qmd)).
+
+---
+
+## Test 1: Chi-Square Test of Independence
+
+**When to use it:** You have two **categorical** variables and want to know if they are related.
+
+**Example:** Is there an association between `playlist_genre` and `mode` (major vs. minor)?
+
+The [R Workbook Ch 6](../workbook/06-inferencing-data.qmd) provides the complete walkthrough with code for:
+
+- Building a contingency table with `table()`
+- Running `chisq.test()`
+- Calculating Cramér's V for effect size
+- Interpreting standardized residuals
+- Writing APA results and journalist translations
+
+::: {.callout-note}
+## Quick Reference
+
+```r
+cont_table <- table(music_filtered$playlist_genre, music_filtered$mode_label)
+chi_result <- chisq.test(cont_table)
+
+# Effect size
+cramers_v <- sqrt(as.numeric(chi_result$statistic) / (sum(cont_table) * (min(dim(cont_table)) - 1)))
+```
+
+**APA template:** A chi-square test of independence revealed a [significant/non-significant] association, chi-squared(df) = X.XX, p [< .001 / = .XXX], Cramer's V = .XX.
+:::
+
+For the full walkthrough, work through [R Workbook Ch 6](../workbook/06-inferencing-data.qmd).
+
+---
+
+## Test 2: Independent-Samples t-Test
+
+**When to use it:** You have one **categorical** variable with exactly **two groups** and one **continuous** variable. You want to know if the two groups differ on the continuous variable.
+
+**Example from Assignment 03:** Do romantic-themed songs spend more time on the Billboard chart than non-romantic songs?
+
+- **Grouping variable:** `romantic_theme` (Romantic vs. Not romantic)
+- **Outcome variable:** `weeks_on_board` (continuous)
+- **Sample:** The 30 songs you hand-coded in Assignment 01
+
+### Step 1: State Your Hypotheses
+
+| | |
+|---|---|
+| **H₀** | There is no difference in chart weeks between romantic and non-romantic songs. |
+| **H₁** | There is a difference in chart weeks between romantic and non-romantic songs. |
+
+### Step 2: Prepare the Data
+
+```r
+library(tidyverse)
+
+music <- readRDS("data/music_data_clean.RDS")
+
+coded_songs <- music |>
+  filter(!is.na(romantic_theme)) |>
+  mutate(romantic_theme = factor(romantic_theme,
+                                  labels = c("Not romantic", "Romantic")))
+
+coded_songs |> count(romantic_theme)
+```
+
+You should see approximately 30 songs split between the two groups.
+
+### Step 3: Visualize Before Testing
+
+Always look at the data before running a test. A boxplot shows the distribution of each group:
+
+```r
+coded_songs |>
+  ggplot(aes(x = romantic_theme, y = weeks_on_board, fill = romantic_theme)) +
+  geom_boxplot(show.legend = FALSE) +
+  labs(
+    title = "Chart Longevity by Romantic Theme",
+    x     = NULL,
+    y     = "Weeks on Billboard Chart"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(plot.title = element_text(face = "bold"))
+```
+
+Before running the test, ask yourself: Do the two boxes overlap substantially? Does one group have a clearly higher median? Are there outliers pulling the mean?
+
+### Step 4: Run the t-Test
+
+R's `t.test()` runs **Welch's t-test** by default, which does not assume the two groups have equal variances. This is the safer choice, especially for small samples.
+
+```r
+t_result <- t.test(
+  weeks_on_board ~ romantic_theme,
+  data = coded_songs
+)
+
+t_result
+```
+
+### Reading the Output
+
+| Value | What It Means |
+|-------|--------------|
+| **t** | The test statistic --- how many standard errors apart the two group means are |
+| **df** | Degrees of freedom (Welch's correction adjusts this downward) |
+| **p-value** | Probability of seeing a difference this large if H₀ were true |
+| **confidence interval** | The range of plausible true differences between the groups |
+| **sample estimates** | The mean of each group |
+
+**Decision rule:** If p < .05, reject H₀ and conclude the groups differ. If p >= .05, you do not have sufficient evidence to claim a difference.
+
+### Step 5: Calculate Cohen's d (Effect Size)
+
+The p-value tells you *whether* the difference is statistically significant. **Cohen's d** tells you *how big* the difference is, in standard deviation units.
+
+```r
+# Extract group statistics
+n1 <- sum(coded_songs$romantic_theme == "Romantic")
+n0 <- sum(coded_songs$romantic_theme == "Not romantic")
+m1 <- mean(coded_songs$weeks_on_board[coded_songs$romantic_theme == "Romantic"])
+m0 <- mean(coded_songs$weeks_on_board[coded_songs$romantic_theme == "Not romantic"])
+s1 <- sd(coded_songs$weeks_on_board[coded_songs$romantic_theme == "Romantic"])
+s0 <- sd(coded_songs$weeks_on_board[coded_songs$romantic_theme == "Not romantic"])
+
+# Pooled standard deviation
+sp <- sqrt(((n1 - 1) * s1^2 + (n0 - 1) * s0^2) / (n1 + n0 - 2))
+
+# Cohen's d
+d <- (m1 - m0) / sp
+round(d, 3)
+```
+
+### Cohen's d Benchmarks
+
+| Cohen's d | Interpretation |
+|-----------|---------------|
+| 0.2 | Small effect |
+| 0.5 | Medium effect |
+| 0.8 | Large effect |
+
+A small effect means the groups differ slightly. A large effect means the groups are clearly distinct. Most social science research finds small-to-medium effects.
+
+### Step 6: Report in APA Format
+
+> An independent-samples t-test was conducted to compare chart longevity between romantic-themed songs (M = ___, SD = ___) and non-romantic songs (M = ___, SD = ___). The difference was [statistically significant / not statistically significant], t(___) = ___, p = ___. Cohen's d = ___, indicating a [small / medium / large / negligible] effect size.
+
+::: {.callout-note}
+## A Note on Small Samples
+
+With only 30 songs, this test has low **statistical power** --- meaning it may fail to detect a real difference even if one exists. A non-significant result here does not prove that romantic theme is unrelated to chart success. It means the sample was too small to detect the effect with confidence. [Chapter 20](20-interpreting-the-call.qmd) explores this issue in depth.
+:::
+
+---
+
+## Test 3: Pearson Correlation
+
+**When to use it:** You have **two continuous variables** and want to know if they are linearly related.
+
+**Example from Assignment 03:** Does Spotify's `speechiness` score predict lyric word count?
+
+This question is interesting because the two measurements come from completely different sources --- Spotify's audio analysis algorithm and Genius's lyric database --- using completely different methods. If they correlate, it validates both measurements.
+
+### Step 1: State Your Hypotheses
+
+| | |
+|---|---|
+| **H₀** | There is no relationship between speechiness and word count. |
+| **H₁** | There is a [positive / negative] relationship between speechiness and word count. |
+
+### Step 2: Create the Word Count Variable
+
+Genius lyrics include section tags like `[Verse 1]` and `[Chorus]` that are not actual words. Strip them before counting:
+
+```r
+music <- music |>
+  mutate(word_count = str_count(
+    str_remove_all(lyrics, "\\[.*?\\]"),  # remove section tags
+    "\\S+"                                 # count non-whitespace sequences (words)
+  ))
+```
+
+Check how many songs have both variables:
+
+```r
+music |>
+  filter(!is.na(word_count), !is.na(speechiness)) |>
+  nrow()
+```
+
+Some songs have missing lyrics (Genius did not have them). This is expected --- it was the most common source of missing data in Assignment 01.
+
+### Step 3: Visualize the Relationship
+
+A scatterplot shows the direction and strength of the relationship. Color by genre to see if the pattern holds across groups or is driven by one genre.
+
+```r
+music |>
+  filter(!is.na(word_count), !is.na(speechiness)) |>
+  ggplot(aes(x = speechiness, y = word_count, color = playlist_genre)) +
+  geom_point(alpha = 0.3, size = 1) +
+  geom_smooth(method = "lm", se = FALSE, color = "black", linewidth = 0.8) +
+  labs(
+    title    = "Spotify Speechiness vs. Genius Lyric Word Count",
+    subtitle = "Each point is one song; black line shows overall trend",
+    x        = "Speechiness (Spotify)",
+    y        = "Word Count (Genius)",
+    color    = "Genre",
+    caption  = "Source: Billboard chart archive -- MC 451 dataset"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(plot.title = element_text(face = "bold"))
+```
+
+Look for:
+
+- **Direction:** Does the trend line go up (positive) or down (negative)?
+- **Strength:** Are points clustered tightly around the line, or scattered widely?
+- **Genre clusters:** Do rap songs cluster at the high end of both variables?
+
+### Step 4: Run the Correlation
+
+```r
+music_lyric <- music |>
+  filter(!is.na(word_count), !is.na(speechiness))
+
+cor_result <- cor.test(
+  music_lyric$speechiness,
+  music_lyric$word_count,
+  method = "pearson"
+)
+
+cor_result
+```
+
+### Reading the Output
+
+| Value | What It Means |
+|-------|--------------|
+| **cor** | Pearson's r --- the correlation coefficient. Range: -1 to +1. |
+| **t** | The test statistic |
+| **df** | Degrees of freedom (n - 2) |
+| **p-value** | Probability of seeing a correlation this large if H₀ were true |
+| **confidence interval** | The range of plausible true correlations |
+
+### Cohen's Benchmarks for r
+
+| Pearson's r | Interpretation |
+|-------------|---------------|
+| .10 | Small effect |
+| .30 | Medium effect |
+| .50 | Large effect |
+
+### Step 5: Report in APA Format
+
+> A Pearson correlation was computed to assess the relationship between Spotify speechiness scores and Genius lyric word counts across ___ songs. There was a [positive / negative] correlation between the two variables, r(___) = ___, p [< .001 / = ___]. According to Cohen's conventions, this represents a [small / medium / large] effect.
+
+::: {.callout-warning}
+## Correlation Is Not Causation
+
+A significant correlation between speechiness and word count does not mean high speechiness *causes* more words (or vice versa). Both may be driven by **genre** --- rap songs are high in speechiness AND have more words. The correlation may reflect genre membership more than a direct causal link.
+:::
+
+---
+
+## Choosing the Right Test
+
+When you sit down to analyze data, the **types of your variables** determine which test to use:
+
+| Your Research Question | Variable Types | Test | Effect Size |
+|------------------------|---------------|------|-------------|
+| Are two categories related? | Categorical x Categorical | Chi-square | Cramer's V |
+| Do two groups differ on a measure? | Categorical (2 groups) x Continuous | t-test | Cohen's d |
+| Are two measures linearly related? | Continuous x Continuous | Pearson correlation | r |
+
+This decision is not a matter of preference. Using the wrong test for your variable types produces meaningless results.
+
+---
+
+## Writing Results in Two Registers
+
+Every finding in Assignment 03 (and in your final portfolio) must be reported twice:
+
+### Register 1: APA Format (for researchers)
+
+- Include: test name, test statistic, degrees of freedom, exact p-value, effect size, descriptive statistics (means, SDs, or proportions)
+- Use italics for statistics: *t*, *r*, *p*, chi-squared
+- Never write "p = .000" --- write "p < .001"
+
+### Register 2: Journalist Translation (for everyone else)
+
+- No jargon: no p-values, no t-statistics, no "statistically significant"
+- Explain what was compared, what the data showed, and why it matters
+- Use concrete language: "Songs with romantic lyrics spent about the same number of weeks on the chart as non-romantic songs" rather than "the null hypothesis was not rejected"
+
+::: {.callout-important}
+## Both Registers Are Required
+
+Being able to write in both registers is what makes a communication researcher different from a statistics student. Your portfolio needs both. Your career will demand both.
+:::
+
+---
+
+## Connection to Assignment 03
+
+::: {.callout-tip}
+## What Assignment 03 Requires
+
+Assignment 03 (Inferencing Data, 100 pts) asks you to:
+
+**RQ1 (50 pts):** Do romantic-themed songs spend more time on the chart?
+
+- State hypotheses, prepare 30-song coded subset, boxplot, t-test, Cohen's d, APA paragraph, journalist translation, sample size reflection
+
+**RQ2 (50 pts):** Does Spotify speechiness predict lyric length?
+
+- State hypotheses, create word_count variable, scatterplot colored by genre, Pearson correlation, APA paragraph, journalist translation, genre reflection
+
+**Conclusion (5 pts):** Reflect on what a null finding means and what a future study should do differently.
+
+All code, all interpretations, all writing must be present in the rendered PDF.
+:::

@@ -1,0 +1,225 @@
+---
+title: "Interpreting the Call: Effect Sizes, Power, and Honest Discussion"
+subtitle: "Chapter 20"
+execute:
+  eval: false
+  echo: true
+---
+
+Running a statistical test is not the finish line. The test gives you a number --- a p-value, a correlation coefficient, an effect size. **Interpreting** that number honestly, in context, with appropriate humility, is the harder and more important skill.
+
+This chapter covers what comes after you get your results: how to evaluate whether an effect matters, why non-significant results are not failures, how to avoid common interpretation traps, and how to write a discussion section that is both confident and honest.
+
+---
+
+## The Test Is Not the Answer
+
+Consider two scenarios from Assignment 03:
+
+**Scenario A:** Your t-test on romantic theme vs. chart weeks returns p = .42 and Cohen's d = 0.31. The result is not statistically significant --- but the effect size is small-to-medium. What does this mean?
+
+**Scenario B:** Your correlation between speechiness and word count returns p < .001 and r = .52. The result is highly significant with a large effect size. What does this mean?
+
+Both results need interpretation. Scenario A is not a failure, and Scenario B is not automatic success. The p-value tells you whether the pattern is likely real; the effect size tells you whether it matters; the context tells you what it means.
+
+---
+
+## Effect Sizes: How Big Is Big?
+
+### Why Significance Alone Is Not Enough
+
+With a large enough sample, *any* difference --- no matter how trivial --- becomes statistically significant. A study of 100,000 people might find that coffee drinkers are 0.3 seconds faster at reaction time tasks, with p < .001. Is that meaningful? No. The effect is real but practically invisible.
+
+Effect sizes measure the **magnitude** of a result, independent of sample size.
+
+### The Three Effect Sizes You Know
+
+| Statistic | What It Measures | Small | Medium | Large |
+|-----------|-----------------|-------|--------|-------|
+| **Cramer's V** | Association between two categorical variables | .10 | .30 | .50 |
+| **Cohen's d** | Difference between two group means (in SD units) | 0.2 | 0.5 | 0.8 |
+| **Pearson's r** | Linear relationship between two continuous variables | .10 | .30 | .50 |
+
+### Context Matters More Than Benchmarks
+
+Cohen himself warned that his benchmarks were "rules of thumb" --- not laws. Whether an effect is meaningful depends on the domain:
+
+- **Medicine:** A Cohen's d of 0.2 for a drug reducing heart attack risk is clinically important --- at scale, it saves thousands of lives.
+- **Education:** A Cohen's d of 0.2 for a teaching intervention that costs nothing to implement is worth adopting.
+- **Marketing:** A Pearson's r of 0.1 between ad exposure and purchase intent might be worth millions in revenue across millions of consumers.
+- **Music research:** A Cramer's V of 0.15 for genre and mode is a small but real pattern that reflects genuine compositional conventions.
+
+The question is never just "is this effect small or large?" --- it is "does this effect matter in this context?"
+
+---
+
+## Statistical Power: Why Small Samples Miss Real Effects
+
+**Power** is the probability that your test will detect a real effect when one exists. It is the complement of Type II error (beta):
+
+$$\text{Power} = 1 - \beta$$
+
+### The Four Factors That Determine Power
+
+| Factor | Effect on Power |
+|--------|----------------|
+| **Sample size (n)** | Larger n = more power |
+| **Effect size** | Larger effects are easier to detect |
+| **Alpha level** | More lenient alpha (e.g., .10) = more power (but more Type I error) |
+| **Variability** | Less noisy data = more power |
+
+### What This Means for Assignment 03
+
+Your t-test in RQ1 uses **30 songs**. This is a very small sample. With n = 30 and a typical small-to-medium effect (d = 0.3-0.5), the power of a t-test is roughly:
+
+| Cohen's d | Power (n = 30) | Interpretation |
+|-----------|----------------|----------------|
+| 0.2 (small) | ~10% | Almost no chance of detecting it |
+| 0.5 (medium) | ~30% | Coin flip --- likely to miss it |
+| 0.8 (large) | ~60% | Decent but not great |
+
+This means: **if your t-test is not significant, it does not prove that romantic theme is unrelated to chart success.** It may simply mean you did not have enough data to detect the effect.
+
+Your correlation in RQ2 uses the full dataset (1,000+ songs with lyrics). With n > 1,000, even small effects (r = .10) are detectable with power > 95%.
+
+::: {.callout-important}
+## "We Didn't Find It" Is Not "It Doesn't Exist"
+
+A non-significant result with low power is inconclusive, not informative. The honest statement is: "The analysis did not detect a significant effect, but the small sample size (n = 30) limits the test's ability to detect small-to-medium effects. A larger sample would be needed to draw firm conclusions."
+:::
+
+---
+
+## Common Interpretation Pitfalls
+
+### 1. Overgeneralizing
+
+Your sample is Billboard Hot 100 songs from 1960--2020. Your findings apply to *Billboard-charting American popular music* --- not "all music," not "music globally," not "music throughout history."
+
+**Bad:** "Romantic themes do not affect a song's success."
+**Good:** "Among Billboard-charting songs in this sample, romantic themes were not significantly associated with chart longevity."
+
+### 2. Causal Language from Correlational Data
+
+**Bad:** "Higher speechiness causes songs to have more words."
+**Good:** "Songs with higher speechiness scores tended to have more words, though this association may reflect genre conventions rather than a direct causal relationship."
+
+The words *causes*, *leads to*, *produces*, and *results in* imply causation. Use *associated with*, *related to*, *tended to*, and *predicted* for correlational findings.
+
+### 3. The Binary p-Value Trap
+
+**Bad:** "p = .049, therefore the effect exists. p = .051, therefore it does not."
+**Good:** "The p-value was near the conventional threshold (p = .051), and the medium effect size (d = 0.45) suggests a meaningful pattern that warrants replication with a larger sample."
+
+These two p-values are practically identical. Treating them as categorically different is an artifact of the .05 convention, not a property of the data.
+
+### 4. Ignoring Non-Significant Results
+
+**Bad:** Running 10 tests, only reporting the 2 that were significant.
+**Good:** Reporting all results, including the 8 that were not significant. Non-significant results are findings too.
+
+Selectively reporting only significant results is called **p-hacking** or the **file drawer problem**. It inflates the false positive rate and distorts the scientific literature.
+
+### 5. HARKing (Hypothesizing After Results are Known)
+
+**Bad:** Looking at the data, noticing that rock songs have more minor-key tracks, then writing "We hypothesized that rock songs would have more minor-key tracks."
+**Good:** Writing your hypothesis *before* running the analysis, as Assignment 03 explicitly requires.
+
+Both exploratory and confirmatory analyses are valid. The dishonesty is in presenting exploration as if it were confirmation.
+
+---
+
+## Writing the Discussion Section
+
+The discussion section is where you step back from the numbers and explain what they mean. It follows a predictable structure:
+
+### 1. Restate the Finding
+
+Start with a plain-English summary of the result. No new statistics --- the reader just saw them in the Results section.
+
+> "The analysis found no significant difference in chart longevity between romantic and non-romantic songs."
+
+### 2. Interpret in Context
+
+Connect the finding to prior research, theory, or common assumptions.
+
+> "This contradicts the popular belief that love songs dominate the charts. While romantic themes are common in popular music, they do not appear to confer a measurable advantage in chart persistence --- at least not in this sample."
+
+### 3. Discuss Practical Significance
+
+Even non-significant results have practical implications.
+
+> "For music producers and playlist curators, this suggests that romantic content alone is not a reliable predictor of commercial success. Other factors --- production quality, artist popularity, release timing --- likely play larger roles."
+
+### 4. Acknowledge Limitations
+
+Be honest about what your study cannot claim. Common limitations for content analysis studies include:
+
+- **Sample size:** "The coded sample of 30 songs limits the statistical power of the t-test."
+- **Generalizability:** "The dataset includes only Billboard-charting songs, which may not represent independent or non-Western music."
+- **Operationalization:** "The binary romantic_theme coding (romantic / not romantic) may oversimplify the range of lyrical themes."
+- **Single coder:** "All coding was performed by a single coder, and intercoder reliability was not assessed."
+- **Dataset constraints:** "Audio features were sourced from Spotify's algorithm, which may not perfectly capture human perceptions of speechiness or energy."
+
+::: {.callout-tip}
+## Limitations Are Credibility
+
+Identifying limitations is not weakness. It is the mark of a researcher who understands their own study. Reviewers and editors trust researchers who acknowledge what their data can and cannot say.
+
+Frame each limitation constructively: "This limitation suggests that future research should..."
+:::
+
+### 5. Suggest Future Directions
+
+Every limitation implies a follow-up study.
+
+> "Future research should replicate this analysis with a larger coded sample (n > 200) to increase statistical power. A multi-coder design with intercoder reliability testing would strengthen the validity of the romantic theme variable."
+
+### 6. Conclude with Implications
+
+End with the so-what. What does this study contribute?
+
+> "This study contributes to our understanding of how lyrical content relates to commercial outcomes in popular music. While the romantic theme finding was inconclusive, the strong correlation between Spotify speechiness and Genius word count demonstrates that automated audio analysis and human-generated lyric data capture related but distinct dimensions of musical content."
+
+---
+
+## Example: A Complete Mini-Discussion
+
+Here is a model discussion paragraph for the Assignment 03 RQ2 result (correlation):
+
+> The Pearson correlation revealed a significant positive relationship between Spotify speechiness and Genius lyric word count (r = .52, p < .001), indicating that songs with higher speechiness scores tend to contain more words. This finding is consistent with the operational definitions of both variables: Spotify's speechiness score detects the presence of spoken words in the audio signal, while Genius word count measures the number of words in the transcribed lyrics. The large effect size suggests these two independently derived measurements are capturing a shared underlying construct --- the degree to which a song is "wordy" versus purely musical.
+>
+> However, the scatterplot revealed that this correlation may be partly driven by genre. Rap songs clustered at the high end of both variables, while genres like EDM and rock clustered at the low end. This raises the possibility that the overall correlation reflects genre membership rather than a direct relationship between speechiness and word count within genres. Future research should examine within-genre correlations to determine whether the relationship holds after controlling for genre effects.
+
+Notice: specific statistics, honest interpretation, limitation identified, future direction proposed.
+
+---
+
+## Try It Yourself
+
+These exercises prepare you for the discussion and reflection sections of Assignment 03:
+
+1. **Write a 3-paragraph mini-discussion** for one of your Assignment 03 findings. Follow the six-part structure above.
+
+2. **List 3 limitations** of the Assignment 03 analysis. For each, write one sentence identifying the limitation and one sentence proposing how a future study could address it.
+
+3. **Write a "future directions" paragraph** suggesting how a follow-up study could build on your findings. Be specific --- name the sample size, the coding approach, and the additional variables you would include.
+
+4. **Rewrite one of your APA paragraphs** as a journalist translation. Remove all jargon. Explain the finding to someone who has never taken a statistics course.
+
+::: {.callout-tip}
+## Connection to Your Final Portfolio
+
+The discussion section of your final portfolio must address both Study 1 (qualitative content analysis) and Study 2 (quantitative analysis). The skills you practice here --- interpreting effect sizes, framing limitations, suggesting future research --- are exactly what the portfolio requires. Start writing now; don't wait until finals week.
+:::
+
+---
+
+## Key Takeaways
+
+1. **A p-value is not the whole story.** Effect size tells you how much it matters. Power tells you whether you could have detected it.
+2. **Non-significant results are not failures.** They are informative, especially when you acknowledge the role of sample size and power.
+3. **Correlation is not causation.** Use the right language for the right design.
+4. **Report everything.** Selective reporting distorts science. Non-significant findings belong in your paper.
+5. **Limitations build credibility.** Honest researchers identify what their study cannot claim.
+6. **Write for two audiences.** APA format for researchers. Plain language for everyone else.
